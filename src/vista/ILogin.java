@@ -5,8 +5,6 @@ import modelo.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ILogin extends JFrame {
 
@@ -51,17 +49,18 @@ public class ILogin extends JFrame {
 
         gbc.gridx = 1; gbc.gridy = 1;
         txtPassword = new JPasswordField(15);
+        txtPassword.setEchoChar('\u2022'); // puntitos por defecto
         panel.add(txtPassword, gbc);
 
         gbc.gridx = 2; gbc.gridy = 1;
-        btnVerPassword = new JButton("👁"); // 👁 icono simple
+        btnVerPassword = new JButton("👁");
         btnVerPassword.setMargin(new Insets(2, 5, 2, 5));
         panel.add(btnVerPassword, gbc);
 
         // Acción para mostrar/ocultar contraseña
         btnVerPassword.addActionListener(e -> {
-            if (txtPassword.getEchoChar() == '\u2022') { // por defecto es •
-                txtPassword.setEchoChar((char) 0); // mostrar texto
+            if (txtPassword.getEchoChar() == '\u2022') {
+                txtPassword.setEchoChar((char) 0); // mostrar
             } else {
                 txtPassword.setEchoChar('\u2022'); // ocultar
             }
@@ -81,65 +80,63 @@ public class ILogin extends JFrame {
         add(panel);
 
         // Acción login
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                autenticar();
+        btnLogin.addActionListener(e -> autenticar());
+    }
+
+    private void autenticar() {
+        String rol = (String) cbRol.getSelectedItem();
+        String password = new String(txtPassword.getPassword());
+
+        UsuarioController uc = new UsuarioController();
+        Usuario u = uc.loginPorRol(rol, password);
+
+        if (u != null) {
+            // ✅ mostrar el último acceso si lo tenía
+            if (u.getUltimoAcceso() != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Último acceso: " + u.getUltimoAcceso(),
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
             }
-        });
-    }
-private void autenticar() {
-    String rol = (String) cbRol.getSelectedItem();
-    String password = new String(txtPassword.getPassword());
 
-    UsuarioController uc = new UsuarioController();
-    Usuario u = uc.loginPorRol(rol, password);
+            // ✅ actualizar último acceso
+            uc.actualizarUltimoAcceso(u.getId());
 
-    if (u != null) {
-        lblMensaje.setForeground(Color.GREEN);
-        lblMensaje.setText("Bienvenido " + u.getTipoUsuario());
+            lblMensaje.setForeground(Color.GREEN);
+            lblMensaje.setText("Bienvenido " + u.getTipoUsuario());
 
-        switch (rol.toUpperCase()) {
-            case "GERENTE":
-                abrirVistaGerente();
-                break;
-            case "CAJERO":
-                JOptionPane.showMessageDialog(this, "Menú de CAJERO");
-                break;
-            case "REPARTIDOR":
-                JOptionPane.showMessageDialog(this, "Menú de REPARTIDOR");
-                break;
-            case "SUPERVISOR":
-                JOptionPane.showMessageDialog(this, "Menú de SUPERVISOR");
-                break;
-            case "ALMACENISTA":
-                JOptionPane.showMessageDialog(this, "Menú de ALMACENISTA");
-                break;
+            switch (rol.toUpperCase()) {
+                case "GERENTE":
+                    abrirVistaGerente();
+                    break;
+                case "CAJERO":
+                    JOptionPane.showMessageDialog(this, "Menú de CAJERO");
+                    break;
+                case "REPARTIDOR":
+                    JOptionPane.showMessageDialog(this, "Menú de REPARTIDOR");
+                    break;
+                case "SUPERVISOR":
+                    JOptionPane.showMessageDialog(this, "Menú de SUPERVISOR");
+                    break;
+                case "ALMACENISTA":
+                    JOptionPane.showMessageDialog(this, "Menú de ALMACENISTA");
+                    break;
+            }
+
+        } else {
+            lblMensaje.setForeground(Color.RED);
+            lblMensaje.setText("Contraseña incorrecta");
         }
-
-    } else {
-        lblMensaje.setForeground(Color.RED);
-        lblMensaje.setText("Contraseña incorrecta");
     }
-}
 
-private void abrirVistaGerente() {
-    // Cierra el login
-    this.dispose();
-
-    // Crea un nuevo JFrame para contener tu panel IGerente
-    JFrame frameGerente = new JFrame("Panel GERENTE");
-    frameGerente.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frameGerente.setSize(600, 400);
-    frameGerente.setLocationRelativeTo(null);
-
-    // Agregamos tu JPanel IGerente dentro del frame
-    frameGerente.setContentPane(new IGerente());
-
-    // Mostrar
-    frameGerente.setVisible(true);
-}
-
+    private void abrirVistaGerente() {
+        this.dispose();
+        JFrame frameGerente = new JFrame("Panel GERENTE");
+        frameGerente.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameGerente.setSize(800, 600);
+        frameGerente.setLocationRelativeTo(null);
+        frameGerente.setContentPane(new IGerente());
+        frameGerente.setVisible(true);
+    }
 
     public static void main(String[] args) {
         UsuarioController uc = new UsuarioController();

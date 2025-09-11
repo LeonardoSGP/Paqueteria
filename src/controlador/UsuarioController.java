@@ -167,5 +167,14 @@ public class UsuarioController {
         }
         return null;
     }
-
+    public void actualizarUltimoAcceso(long userId) {
+    String sql = "UPDATE USUARIO SET ultimo_acceso = NOW() WHERE id=?";
+    try (Connection cn = Conexion.conectar();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setLong(1, userId);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 }
