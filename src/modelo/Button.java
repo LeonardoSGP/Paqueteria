@@ -46,21 +46,22 @@ public class Button extends JButton implements MouseListener, MouseMotionListene
      */
     @SuppressWarnings("LeakingThisInConstructor")
     public Button() {
-        this.setFont(f);
-        this.setPreferredSize(new Dimension(150, 35));
-        this.setSize(new Dimension(150, 35));
-        this.setBorder(null);
-//        this.setBorderPainted(false);
-        this.setContentAreaFilled(false);
-        this.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        this.setBackground(this.colorNormal);
-        this.setForeground(this.colorTextNormal);
-        this.setOpaque(true);
-        this.setVisible(true);
-        this.addMouseListener(this);
-        this.addMouseMotionListener(this);
-    }
+    this.setFont(f);
+    this.setPreferredSize(new Dimension(150, 35));
+    this.setSize(new Dimension(150, 35));
+    this.setBorder(null);
+    this.setContentAreaFilled(true);
+    this.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    this.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    this.setMargin(new java.awt.Insets(0, 0, 0, 0));  // clave para eliminar espacio interno
+    this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    this.setBackground(this.colorNormal);
+    this.setForeground(this.colorTextNormal);
+    this.setOpaque(true);
+    this.setVisible(true);
+    this.addMouseListener(this);
+    this.addMouseMotionListener(this);
+}
 
     /**
      * se pinta la imagen con dimensiones de ancho y alto iguales al alto del

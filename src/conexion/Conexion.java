@@ -10,8 +10,8 @@ public class Conexion {
     public static Connection conectar() {
         try {
             // Añade useSSL=false para entornos de desarrollo/pruebas
-            String url = "jdbc:mysql://localhost/sistema_envios?useSSL=false&autoReconnect=true";
-            Connection cn = DriverManager.getConnection(url, "root", "Rangers18");
+            String url = "jdbc:mysql://localhost:3306/sistema_envios?allowPublicKeyRetrieval=true&useSSL=false";            
+            Connection cn = DriverManager.getConnection(url, "root", "1q2w3e4r");
             return cn;
         } catch (SQLException e) {
             System.out.println("Error en la conexión local: " + e.getMessage());

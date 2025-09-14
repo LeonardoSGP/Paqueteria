@@ -5,7 +5,22 @@
 package vista;
 
 import java.awt.BorderLayout;
+import modelo.Button; 
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -16,8 +31,20 @@ public class Inicio extends javax.swing.JPanel {
     /**
      * Creates new form inicio1
      */
+      // Panel lateral contenedor menú vertical    
+    private JPanel submenuEmpleados;
+    private JPanel submenuClientes;
+    private JPanel submenuEnvios;
+    private JPanel submenuPaquetes;
+    private JPanel submenuRepartidores;
+    private JPanel submenuTiendas;
+    private JPanel submenuZonas;
+    private JPanel submenuReportes;
+    
     public Inicio() {
         initComponents();
+        // 2. AHORA, nosotros configuramos y añadimos la lógica
+        configurarMenu();
     }
 
     /**
@@ -37,12 +64,17 @@ public class Inicio extends javax.swing.JPanel {
 
         };
         panel_menu = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        btnEmpleados = new modelo.Button();
+        btnClientes = new modelo.Button();
+        btnEnvios = new modelo.Button();
+        btnPaquetes = new modelo.Button();
+        btnRepartidores = new modelo.Button();
+        btnTiendas = new modelo.Button();
+        btnZonas = new modelo.Button();
+        btnReportes = new modelo.Button();
         button2 = new modelo.Button();
-        button3 = new modelo.Button();
-        button4 = new modelo.Button();
-        jPanel5 = new javax.swing.JPanel();
+        Panel_Principal = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(1180, 700));
 
@@ -61,6 +93,7 @@ public class Inicio extends javax.swing.JPanel {
         button1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/menu.png"))); // NOI18N
         button1.setColorNormal(new java.awt.Color(255, 153, 51));
         button1.setColorPressed(new java.awt.Color(255, 153, 51));
+        button1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         button1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 button1MouseClicked(evt);
@@ -94,114 +127,113 @@ public class Inicio extends javax.swing.JPanel {
 
         panel_menu.setBackground(new java.awt.Color(255, 153, 51));
         panel_menu.setPreferredSize(new java.awt.Dimension(200, 750));
-
-        jPanel4.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        panel_menu.setLayout(new javax.swing.BoxLayout(panel_menu, javax.swing.BoxLayout.Y_AXIS));
 
         jLabel1.setBackground(new java.awt.Color(0, 86, 179));
         jLabel1.setFont(new java.awt.Font("Lucida Sans", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Gerente");
+        panel_menu.add(jLabel1);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        btnEmpleados.setBackground(new java.awt.Color(255, 153, 51));
+        btnEmpleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Empleados.png"))); // NOI18N
+        btnEmpleados.setText("Empleados");
+        btnEmpleados.setAlignmentY(0.0F);
+        btnEmpleados.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnEmpleados.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnEmpleados.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnEmpleados.setIconTextGap(20);
+        panel_menu.add(btnEmpleados);
+
+        btnClientes.setBackground(new java.awt.Color(255, 153, 51));
+        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/clientes.png"))); // NOI18N
+        btnClientes.setText("Clientes");
+        btnClientes.setAlignmentY(0.0F);
+        btnClientes.setBorderPainted(false);
+        btnClientes.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnClientes.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnClientes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnClientes.setIconTextGap(20);
+        panel_menu.add(btnClientes);
+
+        btnEnvios.setBackground(new java.awt.Color(255, 153, 51));
+        btnEnvios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/envio.png"))); // NOI18N
+        btnEnvios.setText("Envios");
+        btnEnvios.setToolTipText("");
+        btnEnvios.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnEnvios.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnEnvios.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnEnvios.setIconTextGap(20);
+        panel_menu.add(btnEnvios);
+
+        btnPaquetes.setBackground(new java.awt.Color(255, 153, 51));
+        btnPaquetes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/paquete.png"))); // NOI18N
+        btnPaquetes.setText("Paquetes");
+        btnPaquetes.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnPaquetes.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnPaquetes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnPaquetes.setIconTextGap(20);
+        panel_menu.add(btnPaquetes);
+
+        btnRepartidores.setBackground(new java.awt.Color(255, 153, 51));
+        btnRepartidores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/repartidor.png"))); // NOI18N
+        btnRepartidores.setText("Repartidores");
+        btnRepartidores.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnRepartidores.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnRepartidores.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnRepartidores.setIconTextGap(20);
+        panel_menu.add(btnRepartidores);
+
+        btnTiendas.setBackground(new java.awt.Color(255, 153, 51));
+        btnTiendas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/tienda.png"))); // NOI18N
+        btnTiendas.setText("Tiendas");
+        btnTiendas.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnTiendas.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnTiendas.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnTiendas.setIconTextGap(20);
+        panel_menu.add(btnTiendas);
+
+        btnZonas.setBackground(new java.awt.Color(255, 153, 51));
+        btnZonas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/zona.png"))); // NOI18N
+        btnZonas.setText("Zonas");
+        btnZonas.setToolTipText("");
+        btnZonas.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnZonas.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnZonas.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnZonas.setIconTextGap(20);
+        panel_menu.add(btnZonas);
+
+        btnReportes.setBackground(new java.awt.Color(255, 153, 51));
+        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/reporte.png"))); // NOI18N
+        btnReportes.setText("Reportes");
+        btnReportes.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnReportes.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnReportes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnReportes.setIconTextGap(20);
+        panel_menu.add(btnReportes);
 
         button2.setBackground(new java.awt.Color(255, 153, 51));
         button2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cerrar.png"))); // NOI18N
         button2.setText("Cerrar Sesion");
+        button2.setAlignmentY(0.0F);
+        button2.setBorderPainted(false);
         button2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        button2.setIconTextGap(20);
         button2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button2ActionPerformed(evt);
             }
         });
-
-        button3.setBackground(new java.awt.Color(255, 153, 51));
-        button3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Empleados.png"))); // NOI18N
-        button3.setText("Empleados");
-        button3.setColorNormal(new java.awt.Color(255, 153, 51));
-        button3.setColorPressed(new java.awt.Color(255, 153, 51));
-        button3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        button3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button3ActionPerformed(evt);
-            }
-        });
-
-        button4.setBackground(new java.awt.Color(255, 153, 51));
-        button4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/envio.png"))); // NOI18N
-        button4.setText("Envios");
-        button4.setColorNormal(new java.awt.Color(255, 153, 51));
-        button4.setColorPressed(new java.awt.Color(255, 153, 51));
-        button4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        button4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button4ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panel_menuLayout = new javax.swing.GroupLayout(panel_menu);
-        panel_menu.setLayout(panel_menuLayout);
-        panel_menuLayout.setHorizontalGroup(
-            panel_menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(panel_menuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(button2, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(panel_menuLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(panel_menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panel_menuLayout.setVerticalGroup(
-            panel_menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_menuLayout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 360, Short.MAX_VALUE)
-                .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(195, 195, 195))
-        );
+        panel_menu.add(button2);
 
         JP_principal.add(panel_menu, java.awt.BorderLayout.WEST);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setMaximumSize(new java.awt.Dimension(980, 508));
-        jPanel5.setMinimumSize(new java.awt.Dimension(980, 508));
-        jPanel5.setPreferredSize(new java.awt.Dimension(980, 650));
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 980, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
-        );
-
-        JP_principal.add(jPanel5, java.awt.BorderLayout.CENTER);
+        Panel_Principal.setBackground(new java.awt.Color(255, 255, 255));
+        Panel_Principal.setMaximumSize(new java.awt.Dimension(980, 508));
+        Panel_Principal.setMinimumSize(new java.awt.Dimension(980, 508));
+        Panel_Principal.setPreferredSize(new java.awt.Dimension(980, 650));
+        Panel_Principal.setLayout(new java.awt.BorderLayout());
+        JP_principal.add(Panel_Principal, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -261,54 +293,173 @@ public class Inicio extends javax.swing.JPanel {
             w.dispose(); // cierra el JFrame que contiene este panel
         }
     }//GEN-LAST:event_button2ActionPerformed
+  
+    private void configurarMenu() {
+        // === SUBMENÚ DE EMPLEADOS ===
+        submenuEmpleados = new JPanel();
+        submenuEmpleados.setLayout(new BoxLayout(submenuEmpleados, BoxLayout.Y_AXIS));
+        submenuEmpleados.setBackground(new java.awt.Color(255, 153, 51));
+        submenuEmpleados.setVisible(false); // Oculto al inicio
 
-    private void button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button4ActionPerformed
-        // TODO add your handling code here:
-        Envios e = new Envios();
-        JFrame frameGerente = new JFrame("Panel Envios");
-        frameGerente.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameGerente.setLayout(new BorderLayout());
-        frameGerente.add(e, BorderLayout.CENTER);
-        frameGerente.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frameGerente.pack(); 
-        frameGerente.setLocationRelativeTo(null);
-        frameGerente.setVisible(true);
-        java.awt.Window w = javax.swing.SwingUtilities.getWindowAncestor(Inicio.this);
-        if (w != null) {
-            w.dispose(); // cierra el JFrame que contiene este panel
-        }
-    }//GEN-LAST:event_button4ActionPerformed
+        submenuEmpleados.add(crearSubBoton("Crear/Asignar Rol"));
+        
+        // Crea botón para "Ver Empleados" con listener que carga PanelVerEmpleados
+        JButton botonVerEmpleados = crearSubBoton("Ver Empleados");
+        botonVerEmpleados.addActionListener(e -> {
+            mostrarPanelEnContenido(new Empleados());
+        });
+        submenuEmpleados.add(botonVerEmpleados);
+        
+        submenuEmpleados.add(crearSubBoton("Editar/Desactivar"));
+        submenuEmpleados.add(crearSubBoton("Reportes de Empleados"));
+        
+        // Submenú Clientes
+        submenuClientes = new JPanel();
+        submenuClientes.setLayout(new BoxLayout(submenuClientes, BoxLayout.Y_AXIS));
+        submenuClientes.setBackground(new Color(255, 153, 51));
+        submenuClientes.setVisible(false);
 
-    private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
-        // TODO add your handling code here:
-        Empleados e = new Empleados();
-        JFrame frameGerente = new JFrame("Panel Empleados");
-        frameGerente.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameGerente.setLayout(new BorderLayout());
-        frameGerente.add(e, BorderLayout.CENTER);
-        frameGerente.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frameGerente.pack(); 
-        frameGerente.setLocationRelativeTo(null);
-        frameGerente.setVisible(true);
-        java.awt.Window w = javax.swing.SwingUtilities.getWindowAncestor(Inicio.this);
-        if (w != null) {
-            w.dispose(); // cierra el JFrame que contiene este panel
+        submenuClientes.add(crearSubBoton("Registrar Cliente"));
+        submenuClientes.add(crearSubBoton("Ver Clientes"));
+        submenuClientes.add(crearSubBoton("Gestionar Direcciones"));
+        submenuClientes.add(crearSubBoton("Historial de Envios"));
+
+        // Submenú Envios
+        submenuEnvios = new JPanel();
+        submenuEnvios.setLayout(new BoxLayout(submenuEnvios, BoxLayout.Y_AXIS));
+        submenuEnvios.setBackground(new Color(255, 153, 51));
+        submenuEnvios.setVisible(false);
+        submenuEnvios.add(crearSubBoton("Crear Envio"));
+        submenuEnvios.add(crearSubBoton("Ver Envios"));
+        submenuEnvios.add(crearSubBoton("Seguimiento"));
+        submenuEnvios.add(crearSubBoton("Reasignar Repartidor"));
+        submenuEnvios.add(crearSubBoton("Reporte de Envios"));
+
+        // Submenú Paquetes
+        submenuPaquetes = new JPanel();
+        submenuPaquetes.setLayout(new BoxLayout(submenuPaquetes, BoxLayout.Y_AXIS));
+        submenuPaquetes.setBackground(new Color(255, 153, 51));
+        submenuPaquetes.setVisible(false);
+        submenuPaquetes.add(crearSubBoton("Registrar Paquete"));
+        submenuPaquetes.add(crearSubBoton("Ver Paquetes"));
+        submenuPaquetes.add(crearSubBoton("Asignar Envio"));
+        submenuPaquetes.add(crearSubBoton("Reporte de Paquetes"));
+
+        // Submenú Repartidores
+        submenuRepartidores = new JPanel();
+        submenuRepartidores.setLayout(new BoxLayout(submenuRepartidores, BoxLayout.Y_AXIS));
+        submenuRepartidores.setBackground(new Color(255, 153, 51));
+        submenuRepartidores.setVisible(false);
+        submenuRepartidores.add(crearSubBoton("Ver Repartidores"));
+        submenuRepartidores.add(crearSubBoton("Asignar Vehiculo"));
+        submenuRepartidores.add(crearSubBoton("Zonas de Reparto"));
+        submenuRepartidores.add(crearSubBoton("Reporte de Repartidores"));
+
+        // Submenú Tiendas
+        submenuTiendas = new JPanel();
+        submenuTiendas.setLayout(new BoxLayout(submenuTiendas, BoxLayout.Y_AXIS));
+        submenuTiendas.setBackground(new Color(255, 153, 51));
+        submenuTiendas.setVisible(false);
+        submenuTiendas.add(crearSubBoton("Registrar Tienda"));
+        submenuTiendas.add(crearSubBoton("Ver Tiendas"));
+        submenuTiendas.add(crearSubBoton("Configurar Horarios"));
+        submenuTiendas.add(crearSubBoton("Reportes de Capacidad"));
+
+        // Submenú Zonas
+        submenuZonas = new JPanel();
+        submenuZonas.setLayout(new BoxLayout(submenuZonas, BoxLayout.Y_AXIS));
+        submenuZonas.setBackground(new Color(255, 153, 51));
+        submenuZonas.setVisible(false);
+        submenuZonas.add(crearSubBoton("Crear Zonas"));
+        submenuZonas.add(crearSubBoton("Ver Zonas"));
+        submenuZonas.add(crearSubBoton("Asignar Repartidores"));
+
+        // Submenú Reportes
+        submenuReportes = new JPanel();
+        submenuReportes.setLayout(new BoxLayout(submenuReportes, BoxLayout.Y_AXIS));
+        submenuReportes.setBackground(new Color(255, 153, 51));
+        submenuReportes.setVisible(false);
+        submenuReportes.add(crearSubBoton("Ingresos"));
+        submenuReportes.add(crearSubBoton("Clientes Frecuentes"));
+        submenuReportes.add(crearSubBoton("Incidencias"));
+        submenuReportes.add(crearSubBoton("Estadísticas Generales"));
+
+        // Inserta los submenus en el panel_menu según corresponda,
+        panel_menu.add(submenuEmpleados, 2);
+        panel_menu.add(submenuClientes, 4);
+        panel_menu.add(submenuEnvios, 6);
+        panel_menu.add(submenuPaquetes, 8);
+        panel_menu.add(submenuRepartidores, 10);
+        panel_menu.add(submenuTiendas, 12);
+        panel_menu.add(submenuZonas, 14);
+        panel_menu.add(submenuReportes, 16);
+
+        // Asignar listeners tipo acordeón para mostrar/ocultar submenús
+        btnEmpleados.addActionListener(e -> toggleSubmenu(submenuEmpleados));
+        btnClientes.addActionListener(e -> toggleSubmenu(submenuClientes));
+        btnEnvios.addActionListener(e -> toggleSubmenu(submenuEnvios));
+        btnPaquetes.addActionListener(e -> toggleSubmenu(submenuPaquetes));
+        btnRepartidores.addActionListener(e -> toggleSubmenu(submenuRepartidores));
+        btnTiendas.addActionListener(e -> toggleSubmenu(submenuTiendas));
+        btnZonas.addActionListener(e -> toggleSubmenu(submenuZonas));
+        btnReportes.addActionListener(e -> toggleSubmenu(submenuReportes));
+
+    }
+
+    // Método para mostrar/ocultar submenús con cierre tipo acordeón
+    private void toggleSubmenu(JPanel target) {
+        for (JPanel submenu : List.of(
+                submenuEmpleados, submenuClientes, submenuEnvios, submenuPaquetes,
+                submenuRepartidores, submenuTiendas, submenuZonas, submenuReportes
+        )) {
+            if (submenu == target) {
+                submenu.setVisible(!submenu.isVisible());
+            } else {
+                submenu.setVisible(false);
+            }
         }
-    }//GEN-LAST:event_button3ActionPerformed
+        panel_menu.revalidate();
+        panel_menu.repaint();
+    }
+    
+    // Método ayudante para crear botones de submenú con estilo
+    private JButton crearSubBoton(String texto) {
+        JButton boton = new JButton(texto);
+        boton.setFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 16));
+        boton.setBackground(new java.awt.Color(255, 180, 80)); // Naranja más claro
+        boton.setForeground(java.awt.Color.WHITE);
+        boton.setBorderPainted(false);
+        boton.setFocusPainted(false);
+        // Asegura que el botón ocupe todo el ancho
+        boton.setMaximumSize(new Dimension(Integer.MAX_VALUE, boton.getPreferredSize().height));
+        return boton;
+    }
+    
+    private void mostrarPanelEnContenido(JPanel panel) {
+    Panel_Principal.removeAll();
+    Panel_Principal.add(panel);
+    Panel_Principal.revalidate();
+    Panel_Principal.repaint();
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JP_principal;
+    private javax.swing.JPanel Panel_Principal;
+    private modelo.Button btnClientes;
+    private modelo.Button btnEmpleados;
+    private modelo.Button btnEnvios;
+    private modelo.Button btnPaquetes;
+    private modelo.Button btnRepartidores;
+    private modelo.Button btnReportes;
+    private modelo.Button btnTiendas;
+    private modelo.Button btnZonas;
     private modelo.Button button1;
     private modelo.Button button2;
-    private modelo.Button button3;
-    private modelo.Button button4;
     private javax.swing.JPanel der;
     private javax.swing.JPanel encabezado;
     private javax.swing.JPanel izq;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel panel_menu;
     // End of variables declaration//GEN-END:variables
 }
