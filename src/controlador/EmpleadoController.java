@@ -8,46 +8,44 @@ import java.util.*;
 
 public class EmpleadoController {
 
-public void insertar(Empleado e) {
-    String sql = "INSERT INTO EMPLEADO (usuario_id, numero_empleado, nombre, apellidos, telefono, salario_actual, fecha_ingreso, tienda_id, supervisor_id, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    try (Connection cn = Conexion.conectar(); 
-         PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-        
-        ps.setLong(1, e.getUsuarioId());
-        ps.setString(2, e.getNumeroEmpleado());
-        ps.setString(3, e.getNombre());
-        ps.setString(4, e.getApellidos());
-        ps.setString(5, e.getTelefono());
-        ps.setDouble(6, e.getSalarioActual());
-        ps.setTimestamp(7, e.getFechaIngreso() == null ? null : new Timestamp(e.getFechaIngreso().getTime()));
-        
-        // tienda_id puede ser null
-        if (e.getTiendaId() == null) {
-            ps.setNull(8, java.sql.Types.BIGINT);
-        } else {
-            ps.setLong(8, e.getTiendaId());
-        }
+    public void insertar(Empleado e) {
+        String sql = "INSERT INTO EMPLEADO (usuario_id, numero_empleado, nombre, apellidos, telefono, salario_actual, fecha_ingreso, tienda_id, supervisor_id, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        // supervisor_id puede ser null
-        if (e.getSupervisorId() == null) {
-            ps.setNull(9, java.sql.Types.BIGINT);
-        } else {
-            ps.setLong(9, e.getSupervisorId());
-        }
+            ps.setLong(1, e.getUsuarioId());
+            ps.setString(2, e.getNumeroEmpleado());
+            ps.setString(3, e.getNombre());
+            ps.setString(4, e.getApellidos());
+            ps.setString(5, e.getTelefono());
+            ps.setDouble(6, e.getSalarioActual());
+            ps.setTimestamp(7, e.getFechaIngreso() == null ? null : new Timestamp(e.getFechaIngreso().getTime()));
 
-        ps.setBoolean(10, e.isActivo());
-
-        ps.executeUpdate();
-        try (ResultSet rs = ps.getGeneratedKeys()) {
-            if (rs.next()) {
-                e.setId(rs.getLong(1));
+            // tienda_id puede ser null
+            if (e.getTiendaId() == null) {
+                ps.setNull(8, java.sql.Types.BIGINT);
+            } else {
+                ps.setLong(8, e.getTiendaId());
             }
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-    }
-}
 
+            // supervisor_id puede ser null
+            if (e.getSupervisorId() == null) {
+                ps.setNull(9, java.sql.Types.BIGINT);
+            } else {
+                ps.setLong(9, e.getSupervisorId());
+            }
+
+            ps.setBoolean(10, e.isActivo());
+
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    e.setId(rs.getLong(1));
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public Empleado obtenerPorId(long id) {
         String sql = "SELECT * FROM EMPLEADO WHERE id=?";
@@ -77,6 +75,36 @@ public void insertar(Empleado e) {
         return list;
     }
 
+    // ✅ Listar solo empleados activos
+    public List<Empleado> listarActivos() {
+        List<Empleado> list = new ArrayList<>();
+        String sql = "SELECT * FROM EMPLEADO WHERE activo=TRUE";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(map(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
+    // ✅ Buscar empleado por número
+    public Empleado obtenerPorNumero(String numeroEmpleado) {
+        String sql = "SELECT * FROM EMPLEADO WHERE numero_empleado=?";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, numeroEmpleado);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return map(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
     public void actualizar(Empleado e) {
         String sql = "UPDATE EMPLEADO SET usuario_id=?, numero_empleado=?, nombre=?, apellidos=?, telefono=?, salario_actual=?, fecha_ingreso=?, tienda_id=?, supervisor_id=?, activo=? WHERE id=?";
         try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -87,10 +115,32 @@ public void insertar(Empleado e) {
             ps.setString(5, e.getTelefono());
             ps.setDouble(6, e.getSalarioActual());
             ps.setTimestamp(7, e.getFechaIngreso() == null ? null : new Timestamp(e.getFechaIngreso().getTime()));
-            ps.setLong(8, e.getTiendaId());
-            ps.setLong(9, e.getSupervisorId());
+
+            if (e.getTiendaId() == null) {
+                ps.setNull(8, java.sql.Types.BIGINT);
+            } else {
+                ps.setLong(8, e.getTiendaId());
+            }
+
+            if (e.getSupervisorId() == null) {
+                ps.setNull(9, java.sql.Types.BIGINT);
+            } else {
+                ps.setLong(9, e.getSupervisorId());
+            }
+
             ps.setBoolean(10, e.isActivo());
             ps.setLong(11, e.getId());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // ✅ Desactivar empleado
+    public void desactivar(long id) {
+        String sql = "UPDATE EMPLEADO SET activo=FALSE WHERE id=?";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -167,9 +217,46 @@ public void insertar(Empleado e) {
         e.setSalarioActual(rs.getDouble("salario_actual"));
         Timestamp fi = rs.getTimestamp("fecha_ingreso");
         e.setFechaIngreso(fi == null ? null : new java.util.Date(fi.getTime()));
-        e.setTiendaId(rs.getLong("tienda_id"));
-        e.setSupervisorId(rs.getLong("supervisor_id"));
+
+        long tienda = rs.getLong("tienda_id");
+        e.setTiendaId(rs.wasNull() ? null : tienda);
+
+        long supervisor = rs.getLong("supervisor_id");
+        e.setSupervisorId(rs.wasNull() ? null : supervisor);
+
         e.setActivo(rs.getBoolean("activo"));
         return e;
     }
+
+    public boolean existeTelefono(String telefono) {
+        String sql = "SELECT id FROM EMPLEADO WHERE telefono=?";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, telefono);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // true si ya existe
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String generarSiguienteNumeroEmpleado() {
+        String sql = "SELECT MAX(numero_empleado) FROM EMPLEADO";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String ultimo = rs.getString(1);
+                if (ultimo != null) {
+                    // Suponiendo que numero_empleado son códigos tipo "EMP001"
+                    int numero = Integer.parseInt(ultimo.replaceAll("\\D", ""));
+                    int siguiente = numero + 1;
+                    return String.format("EMP%03d", siguiente);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "EMP001"; // si no hay empleados, empezar en EMP001
+    }
+
 }

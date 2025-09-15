@@ -159,7 +159,7 @@ public class UsuarioController {
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return map(rs); 
+                    return map(rs);
                 }
             }
         } catch (SQLException e) {
@@ -167,14 +167,28 @@ public class UsuarioController {
         }
         return null;
     }
+
     public void actualizarUltimoAcceso(long userId) {
-    String sql = "UPDATE USUARIO SET ultimo_acceso = NOW() WHERE id=?";
+        String sql = "UPDATE USUARIO SET ultimo_acceso = NOW() WHERE id=?";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setLong(1, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+}
+    public boolean existeUsername(String username) {
+    String sql = "SELECT 1 FROM USUARIO WHERE username=?";
     try (Connection cn = Conexion.conectar();
          PreparedStatement ps = cn.prepareStatement(sql)) {
-        ps.setLong(1, userId);
-        ps.executeUpdate();
+        ps.setString(1, username);
+        try (ResultSet rs = ps.executeQuery()) {
+            return rs.next();
+        }
     } catch (SQLException e) {
         e.printStackTrace();
     }
+    return false;
 }
 }
