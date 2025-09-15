@@ -15,6 +15,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -120,7 +121,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(jLabel1);
 
         btnEmpleados.setBackground(new java.awt.Color(255, 153, 51));
-        btnEmpleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Empleados.png"))); // NOI18N
         btnEmpleados.setText("Empleados");
         btnEmpleados.setAlignmentY(0.0F);
         btnEmpleados.setColorNormal(new java.awt.Color(255, 153, 51));
@@ -130,7 +130,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnEmpleados);
 
         btnClientes.setBackground(new java.awt.Color(255, 153, 51));
-        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/clientes.png"))); // NOI18N
         btnClientes.setText("Clientes");
         btnClientes.setAlignmentY(0.0F);
         btnClientes.setBorderPainted(false);
@@ -141,7 +140,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnClientes);
 
         btnEnvios.setBackground(new java.awt.Color(255, 153, 51));
-        btnEnvios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/envio.png"))); // NOI18N
         btnEnvios.setText("Envios");
         btnEnvios.setToolTipText("");
         btnEnvios.setColorNormal(new java.awt.Color(255, 153, 51));
@@ -151,7 +149,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnEnvios);
 
         btnPaquetes.setBackground(new java.awt.Color(255, 153, 51));
-        btnPaquetes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/paquete.png"))); // NOI18N
         btnPaquetes.setText("Paquetes");
         btnPaquetes.setColorNormal(new java.awt.Color(255, 153, 51));
         btnPaquetes.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -160,7 +157,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnPaquetes);
 
         btnRepartidores.setBackground(new java.awt.Color(255, 153, 51));
-        btnRepartidores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/repartidor.png"))); // NOI18N
         btnRepartidores.setText("Repartidores");
         btnRepartidores.setColorNormal(new java.awt.Color(255, 153, 51));
         btnRepartidores.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -169,7 +165,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnRepartidores);
 
         btnTiendas.setBackground(new java.awt.Color(255, 153, 51));
-        btnTiendas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/tienda.png"))); // NOI18N
         btnTiendas.setText("Tiendas");
         btnTiendas.setColorNormal(new java.awt.Color(255, 153, 51));
         btnTiendas.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -178,7 +173,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnTiendas);
 
         btnZonas.setBackground(new java.awt.Color(255, 153, 51));
-        btnZonas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/zona.png"))); // NOI18N
         btnZonas.setText("Zonas");
         btnZonas.setToolTipText("");
         btnZonas.setColorNormal(new java.awt.Color(255, 153, 51));
@@ -188,7 +182,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnZonas);
 
         btnReportes.setBackground(new java.awt.Color(255, 153, 51));
-        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/reporte.png"))); // NOI18N
         btnReportes.setText("Reportes");
         btnReportes.setColorNormal(new java.awt.Color(255, 153, 51));
         btnReportes.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -197,7 +190,6 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnReportes);
 
         button2.setBackground(new java.awt.Color(255, 153, 51));
-        button2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cerrar.png"))); // NOI18N
         button2.setText("Cerrar Sesion");
         button2.setAlignmentY(0.0F);
         button2.setBorderPainted(false);
@@ -308,28 +300,88 @@ public class IGerente extends javax.swing.JPanel {
         submenuClientes.setBackground(new Color(255, 153, 51));
         submenuClientes.setVisible(false);
 
-        submenuClientes.add(crearSubBoton("Registrar Cliente"));
-        submenuClientes.add(crearSubBoton("Ver Clientes"));
-        submenuClientes.add(crearSubBoton("Historial de Envios"));
+        //Registra el cliente
+        JButton botonRegistrarCliente = crearSubBoton("Registrar Cliente");
+        botonRegistrarCliente.addActionListener(e -> {
+            ClienteForm clienteForm = new ClienteForm(); // Tu formulario de cliente
+            mostrarPanelEnContenido(clienteForm);
+        });
+        submenuClientes.add(botonRegistrarCliente);
+        //ver clientes
+        JButton botonVerClientes = crearSubBoton("Ver Clientes");
+        botonVerClientes.addActionListener(e -> {
+            mostrarPanelEnContenido(new ListarClientes());
+        });
+        submenuClientes.add(botonVerClientes);
 
-        // Submenú Envios
+        // Historial de clientes
+        JButton botonHistorial = crearSubBoton("Historial de Envios");
+        botonHistorial.addActionListener(e -> {
+            mostrarPanelEnContenido(new HistorialClienteEnvios());
+        });
+        submenuClientes.add(botonHistorial);
+
+        //Submenú Envios
         submenuEnvios = new JPanel();
         submenuEnvios.setLayout(new BoxLayout(submenuEnvios, BoxLayout.Y_AXIS));
         submenuEnvios.setBackground(new Color(255, 153, 51));
         submenuEnvios.setVisible(false);
-        submenuEnvios.add(crearSubBoton("Crear Envio"));
-        submenuEnvios.add(crearSubBoton("Ver Envios"));
-        submenuEnvios.add(crearSubBoton("Seguimiento"));
-        submenuEnvios.add(crearSubBoton("Reporte de Envios"));
+
+// Crear Envío
+        JButton botonCrearEnvio = crearSubBoton("Crear Envio");
+        botonCrearEnvio.addActionListener(e -> {
+            mostrarPanelEnContenido(new EnvioForm());
+        });
+        submenuEnvios.add(botonCrearEnvio);
+
+        // Ver Envíos
+        JButton botonVerEnvios = crearSubBoton("Ver Envios");
+        botonVerEnvios.addActionListener(e -> {
+            mostrarPanelEnContenido(new ListaEnvios());
+        });
+        submenuEnvios.add(botonVerEnvios);
+
+        // Seguimiento
+        JButton botonSeguimiento = crearSubBoton("Seguimiento");
+        botonSeguimiento.addActionListener(e -> {
+            mostrarPanelEnContenido(new SeguimientoEnvio());
+        });
+        submenuEnvios.add(botonSeguimiento);
+
+        // Reporte de Envíos
+        JButton botonReporteEnvios = crearSubBoton("Reporte de Envios");
+        botonReporteEnvios.addActionListener(e -> {
+            // TODO: Implementar ReporteEnvios.java
+            JOptionPane.showMessageDialog(this, "Funcionalidad de reportes en desarrollo", "Info", JOptionPane.INFORMATION_MESSAGE);
+        });
+        submenuEnvios.add(botonReporteEnvios);
 
         // Submenú Paquetes
         submenuPaquetes = new JPanel();
         submenuPaquetes.setLayout(new BoxLayout(submenuPaquetes, BoxLayout.Y_AXIS));
         submenuPaquetes.setBackground(new Color(255, 153, 51));
         submenuPaquetes.setVisible(false);
-        submenuPaquetes.add(crearSubBoton("Registrar Paquete"));
-        submenuPaquetes.add(crearSubBoton("Ver Paquetes"));
-        submenuPaquetes.add(crearSubBoton("Reporte de Paquetes"));
+
+// Registrar Paquete
+        JButton botonRegistrarPaquete = crearSubBoton("Registrar Paquete");
+        botonRegistrarPaquete.addActionListener(e -> {
+            mostrarPanelEnContenido(new PaqueteForm());
+        });
+        submenuPaquetes.add(botonRegistrarPaquete);
+
+        // Ver Paquetes
+        JButton botonVerPaquetes = crearSubBoton("Ver Paquetes");
+        botonVerPaquetes.addActionListener(e -> {
+            mostrarPanelEnContenido(new ListarPaquetes());
+        });
+        submenuPaquetes.add(botonVerPaquetes);
+
+        // Reporte de Paquetes
+        JButton botonReportePaquetes = crearSubBoton("Reporte de Paquetes");
+        botonReportePaquetes.addActionListener(e -> {
+            mostrarPanelEnContenido(new ReportePaquetes());
+        });
+        submenuPaquetes.add(botonReportePaquetes);
 
         // Submenú Repartidores
         submenuRepartidores = new JPanel();
@@ -364,7 +416,6 @@ public class IGerente extends javax.swing.JPanel {
         submenuZonas.setVisible(false);
         submenuZonas.add(crearSubBoton("Registrar Zonas"));
         submenuZonas.add(crearSubBoton("Ver Zonas"));
-        
 
         // Submenú Reportes
         submenuReportes = new JPanel();

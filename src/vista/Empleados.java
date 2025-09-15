@@ -6,14 +6,14 @@ package vista;
 
 /**
  *
- * @author diego
+ * @author lepsgapi@hotmail.com
  */
-public class Envios extends javax.swing.JPanel {
+public class Empleados extends javax.swing.JPanel {
 
     /**
-     * Creates new form Envios
+     * Creates new form ICajero
      */
-    public Envios() {
+    public Empleados() {
         initComponents();
     }
 

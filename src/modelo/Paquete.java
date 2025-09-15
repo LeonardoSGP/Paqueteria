@@ -46,4 +46,5 @@ public class Paquete {
     public void setFechaCreacion(Date fechaCreacion) { this.fechaCreacion = fechaCreacion; }
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }
+    public double calcularVolumen() {        return largo * ancho * alto;}
 }
