@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class TiendaForm extends JPanel {
 
@@ -22,6 +21,7 @@ public class TiendaForm extends JPanel {
     private JButton btnGuardar;
 
     private static int contador = 1;
+    private static String codigoTiendaPendiente = null; // se mantiene hasta guardar
 
     public TiendaForm() {
         setLayout(new GridBagLayout());
@@ -37,15 +37,18 @@ public class TiendaForm extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(new JLabel("Código Tienda:"), gbc);
-        txtCodigo = new JTextField(generarCodigoTienda());
+
+        if (codigoTiendaPendiente == null) {
+            codigoTiendaPendiente = generarCodigoTienda();
+        }
+        txtCodigo = new JTextField(codigoTiendaPendiente);
         txtCodigo.setEditable(false);
         txtCodigo.setFont(fuente);
         gbc.gridx = 1;
         add(txtCodigo, gbc);
 
         // Nombre Tienda
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 1;
         add(new JLabel("Nombre:"), gbc);
         txtNombre = new JTextField();
         txtNombre.setFont(fuente);
@@ -53,8 +56,7 @@ public class TiendaForm extends JPanel {
         add(txtNombre, gbc);
 
         // Dirección
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 2;
         add(new JLabel("Dirección:"), gbc);
         txtDireccion = new JTextField();
         txtDireccion.setFont(fuente);
@@ -62,8 +64,7 @@ public class TiendaForm extends JPanel {
         add(txtDireccion, gbc);
 
         // Teléfono
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridx = 0; gbc.gridy = 3;
         add(new JLabel("Teléfono:"), gbc);
         txtTelefono = new JTextField();
         txtTelefono.setFont(fuente);
@@ -71,8 +72,7 @@ public class TiendaForm extends JPanel {
         add(txtTelefono, gbc);
 
         // Correo
-        gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridx = 0; gbc.gridy = 4;
         add(new JLabel("Correo:"), gbc);
         txtCorreo = new JTextField();
         txtCorreo.setFont(fuente);
@@ -80,18 +80,16 @@ public class TiendaForm extends JPanel {
         add(txtCorreo, gbc);
 
         // Supervisor (gerente_id)
-        gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridx = 0; gbc.gridy = 5;
         add(new JLabel("Supervisor:"), gbc);
-        cbSupervisor = new JComboBox<>(new String[]{"-- Ninguno --"});
+        cbSupervisor = new JComboBox<>();
         cbSupervisor.setFont(fuente);
         gbc.gridx = 1;
         add(cbSupervisor, gbc);
         cargarSupervisores();
 
         // Horario Apertura
-        gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridx = 0; gbc.gridy = 6;
         add(new JLabel("Horario Apertura:"), gbc);
         spHoraApertura = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor editorA = new JSpinner.DateEditor(spHoraApertura, "HH:mm");
@@ -100,8 +98,7 @@ public class TiendaForm extends JPanel {
         add(spHoraApertura, gbc);
 
         // Horario Cierre
-        gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridx = 0; gbc.gridy = 7;
         add(new JLabel("Horario Cierre:"), gbc);
         spHoraCierre = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor editorC = new JSpinner.DateEditor(spHoraCierre, "HH:mm");
@@ -110,8 +107,7 @@ public class TiendaForm extends JPanel {
         add(spHoraCierre, gbc);
 
         // Capacidad Almacén
-        gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridx = 0; gbc.gridy = 8;
         add(new JLabel("Capacidad Almacén:"), gbc);
         txtCapacidad = new JTextField();
         txtCapacidad.setFont(fuente);
@@ -119,9 +115,7 @@ public class TiendaForm extends JPanel {
         add(txtCapacidad, gbc);
 
         // Botón Guardar
-        gbc.gridx = 0;
-        gbc.gridy = 9;
-        gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 9; gbc.gridwidth = 2;
         btnGuardar = new JButton("Registrar Tienda");
         btnGuardar.setFont(new Font("Arial", Font.BOLD, 16));
         btnGuardar.setBackground(new Color(0, 123, 255));
@@ -140,24 +134,24 @@ public class TiendaForm extends JPanel {
         }
 
         try {
-            // Extrae el número después del prefijo "TND"
             int num = Integer.parseInt(ultimo.substring(3));
             return String.format("TND%03d", num + 1);
         } catch (Exception e) {
             e.printStackTrace();
-            return "TND001"; // fallback en caso de error
+            return "TND001";
         }
     }
 
     private void cargarSupervisores() {
-        EmpleadoController ec = new EmpleadoController();
-        List<Empleado> empleados = ec.listar();
         cbSupervisor.removeAllItems();
         cbSupervisor.addItem("-- Ninguno --");
+
+        EmpleadoController ec = new EmpleadoController();
+        UsuarioController uc = new UsuarioController();
+
+        List<Empleado> empleados = ec.listar();
         for (Empleado e : empleados) {
             if (e.isActivo()) {
-                //  Solo carga si el usuario es SUPERVISOR
-                UsuarioController uc = new UsuarioController();
                 String rol = uc.obtenerPorId(e.getUsuarioId()).getTipoUsuario();
                 if ("SUPERVISOR".equalsIgnoreCase(rol)) {
                     cbSupervisor.addItem(e.getId() + " - " + e.getNombre() + " " + e.getApellidos());
@@ -176,24 +170,19 @@ public class TiendaForm extends JPanel {
 
         if (nombre.isEmpty() || direccion.isEmpty() || telefono.isEmpty()
                 || correo.isEmpty() || capacidadStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Todos los campos son obligatorios.",
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Teléfono: exactamente 10 dígitos
         if (!telefono.matches("\\d{10}")) {
-            JOptionPane.showMessageDialog(this,
-                    "El teléfono debe tener exactamente 10 dígitos.",
+            JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 10 dígitos.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Correo válido
         if (!correo.matches("^[\\w._%+-]+@(gmail\\.com|hotmail\\.com|outlook\\.com)$")) {
-            JOptionPane.showMessageDialog(this,
-                    "El correo debe ser válido (gmail, hotmail o outlook).",
+            JOptionPane.showMessageDialog(this, "El correo debe ser válido (gmail, hotmail o outlook).",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -202,8 +191,7 @@ public class TiendaForm extends JPanel {
         try {
             capacidad = Integer.parseInt(capacidadStr);
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "La capacidad debe ser numérica.",
+            JOptionPane.showMessageDialog(this, "La capacidad debe ser numérica.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -228,24 +216,24 @@ public class TiendaForm extends JPanel {
         try {
             TiendaController tc = new TiendaController();
             tc.insertar(t);
-            JOptionPane.showMessageDialog(this,
-                    "Tienda registrada con éxito.",
+            JOptionPane.showMessageDialog(this, "Tienda registrada con éxito.",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
             limpiarFormulario();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al registrar tienda: " + ex.getMessage(),
+            JOptionPane.showMessageDialog(this, "Error al registrar tienda: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void limpiarFormulario() {
-        txtCodigo.setText(generarCodigoTienda());
+        codigoTiendaPendiente = generarCodigoTienda();
+        txtCodigo.setText(codigoTiendaPendiente);
         txtNombre.setText("");
         txtDireccion.setText("");
         txtTelefono.setText("");
         txtCorreo.setText("");
         txtCapacidad.setText("");
+        cargarSupervisores(); // recargar lista actualizada de supervisores
         cbSupervisor.setSelectedIndex(0);
     }
 }
