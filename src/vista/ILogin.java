@@ -133,7 +133,7 @@ public class ILogin extends JFrame {
         JFrame frameGerente = new JFrame("Panel GERENTE");
         frameGerente.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameGerente.setLayout(new BorderLayout());
-        Inicio panel = new Inicio();
+        IGerente panel = new IGerente();
         frameGerente.add(panel, BorderLayout.CENTER);
         frameGerente.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frameGerente.pack(); 
