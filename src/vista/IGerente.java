@@ -25,6 +25,7 @@ public class IGerente extends javax.swing.JPanel {
     private JPanel submenuEnvios;
     private JPanel submenuPaquetes;
     private JPanel submenuRepartidores;
+    private JPanel submenuVehiculos;
     private JPanel submenuTiendas;
     private JPanel submenuZonas;
     private JPanel submenuReportes;
@@ -54,6 +55,7 @@ public class IGerente extends javax.swing.JPanel {
         btnEnvios = new modelo.Button();
         btnPaquetes = new modelo.Button();
         btnRepartidores = new modelo.Button();
+        btnVehiculos = new modelo.Button();
         btnTiendas = new modelo.Button();
         btnZonas = new modelo.Button();
         btnReportes = new modelo.Button();
@@ -168,6 +170,19 @@ public class IGerente extends javax.swing.JPanel {
         btnRepartidores.setIconTextGap(20);
         panel_menu.add(btnRepartidores);
 
+        btnVehiculos.setBackground(new java.awt.Color(255, 153, 51));
+        btnVehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/vehiculo.png"))); // NOI18N
+        btnVehiculos.setText("Vehiculos");
+        btnVehiculos.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnVehiculos.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnVehiculos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnVehiculos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVehiculosActionPerformed(evt);
+            }
+        });
+        panel_menu.add(btnVehiculos);
+
         btnTiendas.setBackground(new java.awt.Color(255, 153, 51));
         btnTiendas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/tienda.png"))); // NOI18N
         btnTiendas.setText("Tiendas");
@@ -275,6 +290,10 @@ public class IGerente extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_button2ActionPerformed
 
+    private void btnVehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehiculosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVehiculosActionPerformed
+
     private void configurarMenu() {
         // === SUBMENÚ DE EMPLEADOS ===
         submenuEmpleados = new JPanel();
@@ -337,6 +356,14 @@ public class IGerente extends javax.swing.JPanel {
         submenuRepartidores.setBackground(new Color(255, 153, 51));
         submenuRepartidores.setVisible(false);
         submenuRepartidores.add(crearSubBoton("Ver Repartidores"));
+        
+        // Submenú Vehiculos
+        submenuVehiculos = new JPanel();
+        submenuVehiculos.setLayout(new BoxLayout(submenuVehiculos, BoxLayout.Y_AXIS));
+        submenuVehiculos.setBackground(new Color(255, 153, 51));
+        submenuVehiculos.setVisible(false);
+        submenuVehiculos.add(crearSubBoton("Agregar Vehiculos"));
+        submenuVehiculos.add(crearSubBoton("Ver Vehiculos"));
 
         // Submenú Tiendas
         submenuTiendas = new JPanel();
@@ -382,9 +409,10 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(submenuEnvios, 6);
         panel_menu.add(submenuPaquetes, 8);
         panel_menu.add(submenuRepartidores, 10);
-        panel_menu.add(submenuTiendas, 12);
-        panel_menu.add(submenuZonas, 14);
-        panel_menu.add(submenuReportes, 16);
+        panel_menu.add(submenuVehiculos, 12);
+        panel_menu.add(submenuTiendas, 14);
+        panel_menu.add(submenuZonas, 16);
+        panel_menu.add(submenuReportes, 18);
 
         // Asignar listeners tipo acordeón para mostrar/ocultar submenús
         btnEmpleados.addActionListener(e -> toggleSubmenu(submenuEmpleados));
@@ -392,6 +420,7 @@ public class IGerente extends javax.swing.JPanel {
         btnEnvios.addActionListener(e -> toggleSubmenu(submenuEnvios));
         btnPaquetes.addActionListener(e -> toggleSubmenu(submenuPaquetes));
         btnRepartidores.addActionListener(e -> toggleSubmenu(submenuRepartidores));
+        btnVehiculos.addActionListener(e -> toggleSubmenu(submenuVehiculos));
         btnTiendas.addActionListener(e -> toggleSubmenu(submenuTiendas));
         btnZonas.addActionListener(e -> toggleSubmenu(submenuZonas));
         btnReportes.addActionListener(e -> toggleSubmenu(submenuReportes));
@@ -402,7 +431,7 @@ public class IGerente extends javax.swing.JPanel {
     private void toggleSubmenu(JPanel target) {
         for (JPanel submenu : List.of(
                 submenuEmpleados, submenuClientes, submenuEnvios, submenuPaquetes,
-                submenuRepartidores, submenuTiendas, submenuZonas, submenuReportes
+                submenuRepartidores, submenuVehiculos,submenuTiendas, submenuZonas, submenuReportes
         )) {
             if (submenu == target) {
                 submenu.setVisible(!submenu.isVisible());
@@ -445,6 +474,7 @@ public class IGerente extends javax.swing.JPanel {
     private modelo.Button btnRepartidores;
     private modelo.Button btnReportes;
     private modelo.Button btnTiendas;
+    private modelo.Button btnVehiculos;
     private modelo.Button btnZonas;
     private modelo.Button button1;
     private modelo.Button button2;
