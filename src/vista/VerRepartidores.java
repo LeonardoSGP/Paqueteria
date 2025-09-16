@@ -55,7 +55,7 @@ public class VerRepartidores extends JPanel {
         btnAsignar.addActionListener(e -> asignarVehiculo());
         btnFinalizar.addActionListener(e -> finalizarAsignacion());
 
-        // Cargar combos
+        // Cargar combos y tabla
         cargarRepartidores();
         cargarVehiculos();
         cargarAsignaciones();
@@ -68,7 +68,6 @@ public class VerRepartidores extends JPanel {
         UsuarioController uc = new UsuarioController();
         EmpleadoController ec = new EmpleadoController();
 
-        // Traer solo usuarios REPARTIDOR
         List<Usuario> usuarios = uc.listarRepartidores();
         for (Usuario u : usuarios) {
             Empleado e = ec.obtenerPorUsuarioId(u.getId());
@@ -135,6 +134,14 @@ public class VerRepartidores extends JPanel {
         RepartidorVehiculoController rvc = new RepartidorVehiculoController();
         rvc.asignarVehiculo(rv);
 
+        // 🔹 Marcar vehículo como NO disponible
+        VehiculoController vc = new VehiculoController();
+        Vehiculo v = vc.obtenerPorId(vehiculoId);
+        if (v != null) {
+            v.setDisponible(false);
+            vc.actualizar(v);
+        }
+
         JOptionPane.showMessageDialog(this, "Vehículo asignado correctamente.");
         cargarVehiculos();
         cargarAsignaciones();
@@ -172,6 +179,13 @@ public class VerRepartidores extends JPanel {
         if (repartidorId != 0 && vehiculoId != 0) {
             RepartidorVehiculoController rvc = new RepartidorVehiculoController();
             rvc.finalizarAsignacion(repartidorId, vehiculoId, new Date());
+
+            Vehiculo v = vc.obtenerPorId(vehiculoId);
+            if (v != null) {
+                v.setDisponible(true);
+                vc.actualizar(v);
+            }
+
             JOptionPane.showMessageDialog(this, "Asignación finalizada.");
             cargarVehiculos();
             cargarAsignaciones();
