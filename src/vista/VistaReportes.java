@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 
@@ -202,8 +201,8 @@ public class VistaReportes extends JPanel {
             return;
         }
 
-        Date inicio = fechaInicio.getDate();
-        Date fin = fechaFin.getDate();
+        java.util.Date inicio = fechaInicio.getDate();
+        java.util.Date fin = fechaFin.getDate();
 
         // Validar fechas para algunos reportes
         if (requiereFechas(tipoReporte) && (inicio == null || fin == null)) {
@@ -253,7 +252,7 @@ public class VistaReportes extends JPanel {
         return !tipoReporte.equals("Clientes Frecuentes");
     }
 
-    private void generarReporteIngresos(Date inicio, Date fin) {
+    private void generarReporteIngresos(java.util.Date inicio, java.util.Date fin) {
         Map<String, Object> datos = reporteController.generarReporteIngresos(inicio, fin);
 
         modeloTabla.setRowCount(0);
@@ -286,7 +285,7 @@ public class VistaReportes extends JPanel {
         cardLayout.show(panelResultados, "TABLA");
     }
 
-    private void generarReporteRepartidores(Date inicio, Date fin) {
+    private void generarReporteRepartidores(java.util.Date inicio, java.util.Date fin) {
         List<Map<String, Object>> datos = reporteController.generarReporteRendimientoRepartidores(inicio, fin);
 
         modeloTabla.setRowCount(0);
@@ -308,7 +307,7 @@ public class VistaReportes extends JPanel {
         cardLayout.show(panelResultados, "TABLA");
     }
 
-    private void generarReporteEstadosEnvios(Date inicio, Date fin) {
+    private void generarReporteEstadosEnvios(java.util.Date inicio, java.util.Date fin) {
         Map<String, Integer> datos = reporteController.generarReporteEstadosEnvios(inicio, fin);
 
         modeloTabla.setRowCount(0);
@@ -329,7 +328,7 @@ public class VistaReportes extends JPanel {
         cardLayout.show(panelResultados, "TABLA");
     }
 
-    private void generarEstadisticasGenerales(Date inicio, Date fin) {
+    private void generarEstadisticasGenerales(java.util.Date inicio, java.util.Date fin) {
         StringBuilder resumen = new StringBuilder();
 
         // Obtener diferentes estadísticas
@@ -381,7 +380,7 @@ public class VistaReportes extends JPanel {
         try {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setSelectedFile(new java.io.File("reporte_" +
-                new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".pdf"));
+                new SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date()) + ".pdf"));
 
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 // Aquí se implementaría la exportación a PDF usando iText

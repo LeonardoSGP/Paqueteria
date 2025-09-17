@@ -142,7 +142,7 @@ public class ReporteController {
     // === REPORTES ESPECÍFICOS DEL NEGOCIO ===
 
     // Reporte de ingresos por periodo
-    public Map<String, Object> generarReporteIngresos(Date fechaInicio, Date fechaFin) {
+    public Map<String, Object> generarReporteIngresos(java.util.Date fechaInicio, java.util.Date fechaFin) {
         Map<String, Object> resultado = new HashMap<>();
         String sql = """
             SELECT
@@ -212,7 +212,7 @@ public class ReporteController {
     }
 
     // Reporte de rendimiento de repartidores
-    public List<Map<String, Object>> generarReporteRendimientoRepartidores(Date fechaInicio, Date fechaFin) {
+    public List<Map<String, Object>> generarReporteRendimientoRepartidores(java.util.Date fechaInicio, java.util.Date fechaFin) {
         List<Map<String, Object>> resultado = new ArrayList<>();
         String sql = """
             SELECT
@@ -253,7 +253,7 @@ public class ReporteController {
     }
 
     // Reporte de estados de envíos
-    public Map<String, Integer> generarReporteEstadosEnvios(Date fechaInicio, Date fechaFin) {
+    public Map<String, Integer> generarReporteEstadosEnvios(java.util.Date fechaInicio, java.util.Date fechaFin) {
         Map<String, Integer> resultado = new HashMap<>();
         String sql = """
             SELECT estado_actual, COUNT(*) as cantidad
@@ -286,13 +286,13 @@ public class ReporteController {
         r.setDescripcion(rs.getString("descripcion"));
 
         Timestamp fg = rs.getTimestamp("fecha_generacion");
-        r.setFechaGeneracion(fg == null ? null : new Date(fg.getTime()));
+        r.setFechaGeneracion(fg == null ? null : new java.util.Date(fg.getTime()));
 
         Timestamp fi = rs.getTimestamp("fecha_inicio");
-        r.setFechaInicio(fi == null ? null : new Date(fi.getTime()));
+        r.setFechaInicio(fi == null ? null : new java.util.Date(fi.getTime()));
 
         Timestamp ff = rs.getTimestamp("fecha_fin");
-        r.setFechaFin(ff == null ? null : new Date(ff.getTime()));
+        r.setFechaFin(ff == null ? null : new java.util.Date(ff.getTime()));
 
         r.setParametros(rs.getString("parametros"));
         r.setResultados(rs.getString("resultados"));

@@ -1,6 +1,5 @@
 package modelo;
 
-import java.util.Date;
 import java.math.BigDecimal;
 
 public class Reporte {
@@ -9,9 +8,9 @@ public class Reporte {
     private String tipoReporte;
     private String titulo;
     private String descripcion;
-    private Date fechaGeneracion;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private java.util.Date fechaGeneracion;
+    private java.util.Date fechaInicio;
+    private java.util.Date fechaFin;
     private String parametros;
     private String resultados;
     private long generadoPorUsuarioId;
@@ -27,7 +26,7 @@ public class Reporte {
         this.tipoReporte = tipoReporte;
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.fechaGeneracion = new Date();
+        this.fechaGeneracion = new java.util.Date();
         this.activo = true;
     }
 
@@ -64,27 +63,27 @@ public class Reporte {
         this.descripcion = descripcion;
     }
 
-    public Date getFechaGeneracion() {
+    public java.util.Date getFechaGeneracion() {
         return fechaGeneracion;
     }
 
-    public void setFechaGeneracion(Date fechaGeneracion) {
+    public void setFechaGeneracion(java.util.Date fechaGeneracion) {
         this.fechaGeneracion = fechaGeneracion;
     }
 
-    public Date getFechaInicio() {
+    public java.util.Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(java.util.Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public java.util.Date getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(java.util.Date fechaFin) {
         this.fechaFin = fechaFin;
     }
 
