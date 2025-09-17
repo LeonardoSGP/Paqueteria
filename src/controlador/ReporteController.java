@@ -140,7 +140,6 @@ public class ReporteController {
     }
 
     // === REPORTES ESPECÍFICOS DEL NEGOCIO ===
-
     // Reporte de ingresos por periodo
     public Map<String, Object> generarReporteIngresos(java.util.Date fechaInicio, java.util.Date fechaFin) {
         Map<String, Object> resultado = new HashMap<>();
@@ -162,10 +161,10 @@ public class ReporteController {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     resultado.put("totalEnvios", rs.getInt("total_envios"));
-                    resultado.put("totalIngresos", rs.getBigDecimal("total_ingresos"));
-                    resultado.put("promedioCosto", rs.getBigDecimal("promedio_costo"));
-                    resultado.put("costoMinimo", rs.getBigDecimal("costo_minimo"));
-                    resultado.put("costoMaximo", rs.getBigDecimal("costo_maximo"));
+                    resultado.put("totalIngresos", rs.getBigDecimal("total_ingresos") != null ? rs.getBigDecimal("total_ingresos") : BigDecimal.ZERO);
+                    resultado.put("promedioCosto", rs.getBigDecimal("promedio_costo") != null ? rs.getBigDecimal("promedio_costo") : BigDecimal.ZERO);
+                    resultado.put("costoMinimo", rs.getBigDecimal("costo_minimo") != null ? rs.getBigDecimal("costo_minimo") : BigDecimal.ZERO);
+                    resultado.put("costoMaximo", rs.getBigDecimal("costo_maximo") != null ? rs.getBigDecimal("costo_maximo") : BigDecimal.ZERO);
                 }
             }
         } catch (SQLException ex) {

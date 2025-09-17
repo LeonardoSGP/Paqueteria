@@ -420,10 +420,7 @@ public class IGerente extends javax.swing.JPanel {
         });
         submenuReportes.add(botonVistaReportes);
 
-        submenuReportes.add(crearSubBoton("Ingresos"));
-        submenuReportes.add(crearSubBoton("Clientes Frecuentes"));
-        submenuReportes.add(crearSubBoton("Incidencias"));
-        submenuReportes.add(crearSubBoton("Estadísticas Generales"));
+   
 
         // Inserta los submenus en el panel_menu según corresponda,
         panel_menu.add(submenuEmpleados, 2);
