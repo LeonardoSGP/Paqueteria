@@ -13,4 +13,5 @@ public class EnvioPaquete {
     public void setPaqueteId(long paqueteId) { this.paqueteId = paqueteId; }
     public Date getFechaAgregado() { return fechaAgregado; }
     public void setFechaAgregado(Date fechaAgregado) { this.fechaAgregado = fechaAgregado; }
+
 }

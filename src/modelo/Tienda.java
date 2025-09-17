@@ -2,19 +2,19 @@ package modelo;
 
 public class Tienda {
 
-    private long id;
+    private Long id;
     private String codigoTienda;
     private String nombreTienda;
     private String direccionCompleta;
     private String telefono;
     private String email;
-    private long gerenteId;
+    private Long gerenteId;
     private java.sql.Time horarioApertura;
     private java.sql.Time horarioCierre;
     private int capacidadAlmacen;
     private boolean activa;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -62,7 +62,7 @@ public class Tienda {
         this.email = email;
     }
 
-    public long getGerenteId() {
+    public Long getGerenteId() {
         return gerenteId;
     }
 

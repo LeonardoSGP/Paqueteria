@@ -379,5 +379,22 @@ public List<Map<String, Object>> reportePorMes() {
     return resultados;
 }
 
+public void insertarPaqueteEnvio(Paquete paquete, long envioId) {
+    String sql = "INSERT INTO ENVIO_PAQUETE (envio_id, paquete_id) VALUES (?, ?)";
+    
+    try (Connection cn = Conexion.conectar();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+        
+        ps.setLong(1, envioId);
+        ps.setLong(2, paquete.getId());
+        
+        ps.executeUpdate();
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+
 }
 

@@ -75,7 +75,6 @@ public class IGerente extends javax.swing.JPanel {
         izq.setLayout(new java.awt.BorderLayout());
 
         button1.setBackground(new java.awt.Color(255, 153, 51));
-        button1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/menu.png"))); // NOI18N
         button1.setColorNormal(new java.awt.Color(255, 153, 51));
         button1.setColorPressed(new java.awt.Color(255, 153, 51));
         button1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -327,7 +326,7 @@ public class IGerente extends javax.swing.JPanel {
         submenuEnvios.setBackground(new Color(255, 153, 51));
         submenuEnvios.setVisible(false);
 
-// Crear Envío
+        // Crear Envío
         JButton botonCrearEnvio = crearSubBoton("Crear Envio");
         botonCrearEnvio.addActionListener(e -> {
             mostrarPanelEnContenido(new EnvioForm());
