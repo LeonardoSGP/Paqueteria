@@ -413,6 +413,13 @@ public class IGerente extends javax.swing.JPanel {
         submenuReportes.setLayout(new BoxLayout(submenuReportes, BoxLayout.Y_AXIS));
         submenuReportes.setBackground(new Color(255, 153, 51));
         submenuReportes.setVisible(false);
+
+        JButton botonVistaReportes = crearSubBoton("Vista de Reportes");
+        botonVistaReportes.addActionListener(e -> {
+            mostrarPanelEnContenido(new VistaReportes());
+        });
+        submenuReportes.add(botonVistaReportes);
+
         submenuReportes.add(crearSubBoton("Ingresos"));
         submenuReportes.add(crearSubBoton("Clientes Frecuentes"));
         submenuReportes.add(crearSubBoton("Incidencias"));

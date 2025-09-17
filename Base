@@ -251,3 +251,19 @@ CREATE TABLE DIRECCION_CLIENTE (
     activa BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (cliente_id) REFERENCES CLIENTE(id)
 );
+
+CREATE TABLE REPORTE (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    tipo_reporte VARCHAR(50) NOT NULL,
+    titulo VARCHAR(200) NOT NULL,
+    descripcion TEXT,
+    fecha_generacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_inicio DATETIME,
+    fecha_fin DATETIME,
+    parametros TEXT,
+    resultados LONGTEXT,
+    generado_por_usuario_id BIGINT,
+    formato_salida VARCHAR(20) DEFAULT 'HTML',
+    activo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (generado_por_usuario_id) REFERENCES USUARIO(id)
+);
