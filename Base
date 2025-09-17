@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS sistema_envios;
 USE sistema_envios;
 
--- 1. Tablas independientes (no dependen de otras)
 CREATE TABLE USUARIO (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -41,21 +40,18 @@ CREATE TABLE VEHICULO (
     activo BOOLEAN DEFAULT TRUE
 );
 
--- 2. Tablas que dependen de las anteriores
 CREATE TABLE CLIENTE (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     usuario_id BIGINT UNIQUE,
     codigo_cliente VARCHAR(20) UNIQUE NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
-    telefono VARCHAR(20),
-    tipo_cliente_id INT,
+    telefono VARCHAR(20) UNIQUE,
     credito_disponible DECIMAL(10,2) DEFAULT 0,
     descuento_asignado DECIMAL(5,2) DEFAULT 0,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     activo BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (usuario_id) REFERENCES USUARIO(id),
-    FOREIGN KEY (tipo_cliente_id) REFERENCES TIPO_CLIENTE(id)
+    FOREIGN KEY (usuario_id) REFERENCES USUARIO(id)
 );
 
 CREATE TABLE EMPLEADO (
@@ -64,7 +60,7 @@ CREATE TABLE EMPLEADO (
     numero_empleado VARCHAR(20) UNIQUE NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
-    telefono VARCHAR(20),
+    telefono VARCHAR(20) UNIQUE,
     salario_actual DECIMAL(10,2) NOT NULL,
     fecha_ingreso DATE NOT NULL,
     tienda_id BIGINT,
@@ -91,7 +87,7 @@ CREATE TABLE TIENDA (
     codigo_tienda VARCHAR(20) UNIQUE NOT NULL,
     nombre_tienda VARCHAR(100) NOT NULL,
     direccion_completa TEXT NOT NULL,
-    telefono VARCHAR(20),
+    telefono VARCHAR(20) UNIQUE,
     email VARCHAR(100),
     gerente_id BIGINT,
     horario_apertura TIME,
@@ -101,7 +97,6 @@ CREATE TABLE TIENDA (
     FOREIGN KEY (gerente_id) REFERENCES EMPLEADO(id)
 );
 
--- 3. Tablas de relación muchos-a-muchos
 CREATE TABLE EMPLEADO_PUESTO (
     empleado_id BIGINT,
     puesto_id INT,
@@ -119,11 +114,10 @@ CREATE TABLE REPARTIDOR_VEHICULO (
     fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     fecha_fin DATETIME,
     PRIMARY KEY (repartidor_id, vehiculo_id, fecha_asignacion),
-    FOREIGN KEY (repartidor_id) REFERENCES REPARTIDOR_INFO(id),
+    FOREIGN KEY (repartidor_id) REFERENCES EMPLEADO(id),
     FOREIGN KEY (vehiculo_id) REFERENCES VEHICULO(id)
 );
 
--- 4. Tablas que dependen de cliente/empleado/repartidor/tienda
 CREATE TABLE ZONA (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     codigo_zona VARCHAR(20) UNIQUE NOT NULL,
@@ -143,7 +137,7 @@ CREATE TABLE ZONA_REPARTIDOR (
     activo BOOLEAN DEFAULT TRUE,
     PRIMARY KEY (zona_id, repartidor_id),
     FOREIGN KEY (zona_id) REFERENCES ZONA(id),
-    FOREIGN KEY (repartidor_id) REFERENCES REPARTIDOR_INFO(id)
+    FOREIGN KEY (repartidor_id) REFERENCES EMPLEADO(id)
 );
 
 CREATE TABLE PAQUETE (
@@ -250,20 +244,4 @@ CREATE TABLE DIRECCION_CLIENTE (
     principal BOOLEAN DEFAULT FALSE,
     activa BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (cliente_id) REFERENCES CLIENTE(id)
-);
-
-CREATE TABLE REPORTE (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    tipo_reporte VARCHAR(50) NOT NULL,
-    titulo VARCHAR(200) NOT NULL,
-    descripcion TEXT,
-    fecha_generacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    fecha_inicio DATETIME,
-    fecha_fin DATETIME,
-    parametros TEXT,
-    resultados LONGTEXT,
-    generado_por_usuario_id BIGINT,
-    formato_salida VARCHAR(20) DEFAULT 'HTML',
-    activo BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (generado_por_usuario_id) REFERENCES USUARIO(id)
 );
