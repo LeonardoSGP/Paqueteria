@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class EnvioController {
 
-    public void insertar(Envio e) {
+   public void insertar(Envio e) {
     String sql = """
         INSERT INTO ENVIO (
             numero_seguimiento, remitente_id, destinatario_id, direccion_origen, 
@@ -71,6 +71,7 @@ public class EnvioController {
         System.out.println("ErrorCode: " + ex.getErrorCode());
     }
 }
+
 
     public Envio obtenerPorId(long id) {
         String sql = "SELECT * FROM ENVIO WHERE id=?";
@@ -224,7 +225,7 @@ public class EnvioController {
         }
     }
 
-    public String generarSiguienteNumeroSeguimiento() {
+   public String generarSiguienteNumeroSeguimiento() {
     String sql = "SELECT COUNT(*) FROM ENVIO";
     try (Connection cn = Conexion.conectar();
          PreparedStatement ps = cn.prepareStatement(sql);
@@ -318,15 +319,4 @@ public class EnvioController {
 
         return e;
     }
-    
-    public void agregarPaqueteAEnvio(long envioId, long paqueteId) throws SQLException {
-    String sql = "INSERT INTO ENVIO_PAQUETE (envio_id, paquete_id) VALUES (?, ?)";
-    try (Connection cn = Conexion.conectar();
-         PreparedStatement ps = cn.prepareStatement(sql)) {
-        ps.setLong(1, envioId);
-        ps.setLong(2, paqueteId);
-        ps.executeUpdate();
-    }
-}
-
 }
