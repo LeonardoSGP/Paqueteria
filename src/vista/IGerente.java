@@ -326,28 +326,80 @@ public class IGerente extends javax.swing.JPanel {
         submenuClientes.setBackground(new Color(255, 153, 51));
         submenuClientes.setVisible(false);
 
-        submenuClientes.add(crearSubBoton("Registrar Cliente"));
-        submenuClientes.add(crearSubBoton("Ver Clientes"));
-        submenuClientes.add(crearSubBoton("Historial de Envios"));
+        //Registra el cliente
+        JButton botonRegistrarCliente = crearSubBoton("Registrar Cliente");
+        botonRegistrarCliente.addActionListener(e -> {
+            ClienteForm clienteForm = new ClienteForm(); // Tu formulario de cliente
+            mostrarPanelEnContenido(clienteForm);
+        });
+        submenuClientes.add(botonRegistrarCliente);
+        //ver clientes
+        JButton botonVerClientes = crearSubBoton("Ver Clientes");
+        botonVerClientes.addActionListener(e -> {
+            mostrarPanelEnContenido(new ListarClientes());
+        });
+        submenuClientes.add(botonVerClientes);
 
-        // Submenú Envios
+        // Historial de clientes
+        JButton botonHistorial = crearSubBoton("Historial de Envios");
+        botonHistorial.addActionListener(e -> {
+            mostrarPanelEnContenido(new HistorialClienteEnvios());
+        });
+        submenuClientes.add(botonHistorial);
+
+        //Submenú Envios
         submenuEnvios = new JPanel();
         submenuEnvios.setLayout(new BoxLayout(submenuEnvios, BoxLayout.Y_AXIS));
         submenuEnvios.setBackground(new Color(255, 153, 51));
         submenuEnvios.setVisible(false);
-        submenuEnvios.add(crearSubBoton("Crear Envio"));
-        submenuEnvios.add(crearSubBoton("Ver Envios"));
-        submenuEnvios.add(crearSubBoton("Seguimiento"));
-        submenuEnvios.add(crearSubBoton("Reporte de Envios"));
 
-        // Submenú Paquetes
+        // Crear Envío
+        JButton botonCrearEnvio = crearSubBoton("Crear Envio");
+        botonCrearEnvio.addActionListener(e -> {
+            mostrarPanelEnContenido(new EnvioForm());
+        });
+        submenuEnvios.add(botonCrearEnvio);
+
+        // Ver Envíos
+        JButton botonVerEnvios = crearSubBoton("Ver Envios");
+        botonVerEnvios.addActionListener(e -> {
+            mostrarPanelEnContenido(new ListaEnvios());
+        });
+        submenuEnvios.add(botonVerEnvios);
+
+        // Seguimiento
+        JButton botonSeguimiento = crearSubBoton("Seguimiento");
+        botonSeguimiento.addActionListener(e -> {
+            mostrarPanelEnContenido(new SeguimientoEnvio());
+        });
+        submenuEnvios.add(botonSeguimiento);
+
+ // Submenú Paquetes
         submenuPaquetes = new JPanel();
         submenuPaquetes.setLayout(new BoxLayout(submenuPaquetes, BoxLayout.Y_AXIS));
         submenuPaquetes.setBackground(new Color(255, 153, 51));
         submenuPaquetes.setVisible(false);
-        submenuPaquetes.add(crearSubBoton("Registrar Paquete"));
-        submenuPaquetes.add(crearSubBoton("Ver Paquetes"));
-        submenuPaquetes.add(crearSubBoton("Reporte de Paquetes"));
+
+// Registrar Paquete
+        JButton botonRegistrarPaquete = crearSubBoton("Registrar Paquete");
+        botonRegistrarPaquete.addActionListener(e -> {
+            mostrarPanelEnContenido(new PaqueteForm());
+        });
+        submenuPaquetes.add(botonRegistrarPaquete);
+
+        // Ver Paquetes
+        JButton botonVerPaquetes = crearSubBoton("Ver Paquetes");
+        botonVerPaquetes.addActionListener(e -> {
+            mostrarPanelEnContenido(new ListarPaquetes());
+        });
+        submenuPaquetes.add(botonVerPaquetes);
+
+        // Reporte de Paquetes
+        JButton botonReportePaquetes = crearSubBoton("Reporte de Paquetes");
+        botonReportePaquetes.addActionListener(e -> {
+            mostrarPanelEnContenido(new ReportePaquetes());
+        });
+        submenuPaquetes.add(botonReportePaquetes);
 
         // Submenú Repartidores
         submenuRepartidores = new JPanel();
@@ -419,8 +471,6 @@ public class IGerente extends javax.swing.JPanel {
             mostrarPanelEnContenido(new VistaReportes());
         });
         submenuReportes.add(botonVistaReportes);
-
-   
 
         // Inserta los submenus en el panel_menu según corresponda,
         panel_menu.add(submenuEmpleados, 2);
