@@ -11,7 +11,7 @@ public class Conexion {
         try {
             // Añade useSSL=false para entornos de desarrollo/pruebas
             String url = "jdbc:mysql://localhost:3306/sistema_envios?allowPublicKeyRetrieval=true&useSSL=false";            
-            Connection cn = DriverManager.getConnection(url, "root", "matrix469");
+            Connection cn = DriverManager.getConnection(url, "root", "Rangers18");
             return cn;
         } catch (SQLException e) {
             System.out.println("Error en la conexión local: " + e.getMessage());

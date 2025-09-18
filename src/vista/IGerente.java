@@ -357,14 +357,6 @@ public class IGerente extends javax.swing.JPanel {
         });
         submenuEnvios.add(botonSeguimiento);
 
-        // Reporte de Envíos
-        JButton botonReporteEnvios = crearSubBoton("Reporte de Envios");
-        botonReporteEnvios.addActionListener(e -> {
-            // TODO: Implementar ReporteEnvios.java
-            JOptionPane.showMessageDialog(this, "Funcionalidad de reportes en desarrollo", "Info", JOptionPane.INFORMATION_MESSAGE);
-        });
-        submenuEnvios.add(botonReporteEnvios);
-
         // Submenú Paquetes
         submenuPaquetes = new JPanel();
         submenuPaquetes.setLayout(new BoxLayout(submenuPaquetes, BoxLayout.Y_AXIS));

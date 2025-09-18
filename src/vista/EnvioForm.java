@@ -250,12 +250,10 @@ public class EnvioForm extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollObs, gbc);
 
-        // Scroll para el panel principal
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPane, BorderLayout.CENTER);
+// Forzamos altura mayor para que el scroll aparezca siempre
+        mainPanel.setPreferredSize(new Dimension(950, 1200)); // 👈 juega con 1200 o el número que necesites
 
-        // ---------- Panel de botones FIJO en la parte inferior (solo UI) ----------
+        // ---------- Panel de botones DENTRO DEL FORMULARIO ----------
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.setBackground(Color.WHITE);
 
@@ -276,7 +274,18 @@ public class EnvioForm extends JPanel {
         panelBotones.add(btnGuardar);
         panelBotones.add(btnLimpiar);
 
-        add(panelBotones, BorderLayout.SOUTH);
+// 👇 ahora van dentro del mainPanel como la última fila
+        gbc.gridx = 0;
+        gbc.gridy = 8; // asegúrate que sea el siguiente número libre
+        gbc.gridwidth = 4;
+        mainPanel.add(panelBotones, gbc);
+
+// Scroll que envuelve TODO (incluyendo los botones)
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // scroll más suave
+        add(scrollPane, BorderLayout.CENTER);
+
     }
 
     private void cargarClientes() {
@@ -421,9 +430,10 @@ public class EnvioForm extends JPanel {
 
     // Render para mostrar clientes en JComboBox (UI only)
     private static class ClienteComboRenderer extends DefaultListCellRenderer {
+
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-                                                      boolean isSelected, boolean cellHasFocus) {
+                boolean isSelected, boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof Cliente) {
                 Cliente cliente = (Cliente) value;
