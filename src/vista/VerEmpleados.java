@@ -6,6 +6,7 @@ import controlador.TiendaController;
 import modelo.Empleado;
 import modelo.Usuario;
 import modelo.Tienda;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -21,7 +22,7 @@ public class VerEmpleados extends JPanel {
     private DefaultTableModel modeloTabla;
 
     private JTextField txtNumeroEmpleado, txtNombre, txtApellidos, txtTelefono, txtSalario, txtCorreo;
-    private JComboBox<String> cbSupervisor, cbTienda;
+    private JComboBox<String> cbSupervisor, cbTienda, cbRol;
     private JButton btnActualizar, btnDesactivar;
 
     private Empleado empleadoSeleccionado;
@@ -39,7 +40,7 @@ public class VerEmpleados extends JPanel {
 
         int fila = 0;
 
-        // Número empleado (solo lectura)
+        // Número empleado
         gbc.gridx = 0; gbc.gridy = fila;
         panelEdicion.add(new JLabel("Número:"), gbc);
         txtNumeroEmpleado = new JTextField(10);
@@ -83,23 +84,31 @@ public class VerEmpleados extends JPanel {
         gbc.gridx = 5;
         panelEdicion.add(txtSalario, gbc);
 
-        // Supervisor
+        // Rol
         fila++;
         gbc.gridx = 0; gbc.gridy = fila;
+        panelEdicion.add(new JLabel("Rol:"), gbc);
+        cbRol = new JComboBox<>(new String[]{"CAJERO", "SUPERVISOR", "REPARTIDOR", "ALMACENISTA"});
+        gbc.gridx = 1;
+        panelEdicion.add(cbRol, gbc);
+
+        // Supervisor
+        gbc.gridx = 2; gbc.gridy = fila;
         panelEdicion.add(new JLabel("Supervisor:"), gbc);
         cbSupervisor = new JComboBox<>(new String[]{"-- Ninguno --"});
-        gbc.gridx = 1;
+        gbc.gridx = 3;
         panelEdicion.add(cbSupervisor, gbc);
 
         // Tienda
-        gbc.gridx = 2; gbc.gridy = fila;
+        gbc.gridx = 4; gbc.gridy = fila;
         panelEdicion.add(new JLabel("Tienda:"), gbc);
         cbTienda = new JComboBox<>(new String[]{"-- Ninguna --"});
-        gbc.gridx = 3;
+        gbc.gridx = 5;
         panelEdicion.add(cbTienda, gbc);
 
         // Botones
-        gbc.gridx = 4; gbc.gridy = fila; gbc.gridwidth = 2;
+        fila++;
+        gbc.gridx = 0; gbc.gridy = fila; gbc.gridwidth = 6;
         JPanel panelBtns = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnActualizar = new JButton("Actualizar");
         btnDesactivar = new JButton("Desactivar");
@@ -110,7 +119,7 @@ public class VerEmpleados extends JPanel {
         add(panelEdicion, BorderLayout.NORTH);
 
         // === Tabla de empleados ===
-        String[] columnas = {"Número", "Nombre", "Apellidos", "Teléfono", "Correo", "Salario", "Activo"};
+        String[] columnas = {"Número", "Nombre", "Apellidos", "Teléfono", "Correo", "Rol", "Tienda", "Salario", "Activo"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -119,7 +128,7 @@ public class VerEmpleados extends JPanel {
         };
         tabla = new JTable(modeloTabla);
 
-        // Renderer para marcar inactivos en rojo y tachados
+        // Renderer para inactivos en rojo y tachados
         tabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
@@ -127,7 +136,7 @@ public class VerEmpleados extends JPanel {
                                                            int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-                boolean activo = (boolean) modeloTabla.getValueAt(row, 6);
+                boolean activo = (boolean) modeloTabla.getValueAt(row, 8);
                 if (!activo) {
                     c.setForeground(Color.RED);
                     Font font = c.getFont();
@@ -151,7 +160,7 @@ public class VerEmpleados extends JPanel {
         btnActualizar.addActionListener(e -> actualizarEmpleado());
         btnDesactivar.addActionListener(e -> toggleEstadoEmpleado());
 
-        // Cargar empleados, supervisores y tiendas
+        // Cargar combos y empleados
         cargarEmpleados();
         cargarSupervisores();
         cargarTiendas();
@@ -161,16 +170,20 @@ public class VerEmpleados extends JPanel {
         modeloTabla.setRowCount(0);
         EmpleadoController ec = new EmpleadoController();
         UsuarioController uc = new UsuarioController();
+        TiendaController tc = new TiendaController();
 
         List<Empleado> lista = ec.listar();
         for (Empleado e : lista) {
             Usuario u = uc.obtenerPorId(e.getUsuarioId());
+            Tienda t = (e.getTiendaId() != null) ? tc.obtenerPorId(e.getTiendaId()) : null;
             modeloTabla.addRow(new Object[]{
                     e.getNumeroEmpleado(),
                     e.getNombre(),
                     e.getApellidos(),
                     e.getTelefono(),
                     (u != null ? u.getEmail() : ""),
+                    (u != null ? u.getTipoUsuario() : "SIN ROL"),
+                    (t != null ? t.getNombreTienda() : "SIN TIENDA"),
                     e.getSalarioActual(),
                     e.isActivo()
             });
@@ -222,10 +235,14 @@ public class VerEmpleados extends JPanel {
                 txtSalario.setText(String.valueOf(empleadoSeleccionado.getSalarioActual()));
                 txtCorreo.setText(usuarioSeleccionado != null ? usuarioSeleccionado.getEmail() : "");
 
+                if (usuarioSeleccionado != null) {
+                    cbRol.setSelectedItem(usuarioSeleccionado.getTipoUsuario());
+                }
+
                 boolean activo = empleadoSeleccionado.isActivo();
                 btnDesactivar.setText(activo ? "Desactivar" : "Activar");
 
-                // Seleccionar supervisor en combo
+                // Supervisor
                 if (empleadoSeleccionado.getSupervisorId() != null) {
                     EmpleadoController ec2 = new EmpleadoController();
                     Empleado supervisor = ec2.obtenerPorId(empleadoSeleccionado.getSupervisorId());
@@ -236,7 +253,7 @@ public class VerEmpleados extends JPanel {
                     cbSupervisor.setSelectedIndex(0);
                 }
 
-                // Seleccionar tienda en combo
+                // Tienda
                 if (empleadoSeleccionado.getTiendaId() != null) {
                     TiendaController tc = new TiendaController();
                     Tienda tienda = tc.obtenerPorId(empleadoSeleccionado.getTiendaId());
@@ -247,7 +264,6 @@ public class VerEmpleados extends JPanel {
                     cbTienda.setSelectedIndex(0);
                 }
 
-                // Bloquear edición si está inactivo
                 setCamposEditables(activo);
             }
         }
@@ -259,6 +275,7 @@ public class VerEmpleados extends JPanel {
         txtTelefono.setEditable(editable);
         txtSalario.setEditable(editable);
         txtCorreo.setEditable(editable);
+        cbRol.setEnabled(editable);
         cbSupervisor.setEnabled(editable);
         cbTienda.setEnabled(editable);
         btnActualizar.setEnabled(editable);
@@ -275,6 +292,7 @@ public class VerEmpleados extends JPanel {
         String telefono = txtTelefono.getText().trim();
         String salarioStr = txtSalario.getText().trim();
         String correo = txtCorreo.getText().trim();
+        String rol = (String) cbRol.getSelectedItem();
 
         if (nombre.isEmpty() || apellidos.isEmpty() || telefono.isEmpty() || salarioStr.isEmpty() || correo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
@@ -299,7 +317,7 @@ public class VerEmpleados extends JPanel {
             empleadoSeleccionado.setTelefono(telefono);
             empleadoSeleccionado.setSalarioActual(salario);
 
-            // Guardar supervisor
+            // Supervisor
             String supervisorSel = (String) cbSupervisor.getSelectedItem();
             if (supervisorSel != null && !supervisorSel.equals("-- Ninguno --")) {
                 long supervisorId = Long.parseLong(supervisorSel.split(" - ")[0]);
@@ -308,7 +326,7 @@ public class VerEmpleados extends JPanel {
                 empleadoSeleccionado.setSupervisorId(null);
             }
 
-            // Guardar tienda
+            // Tienda
             String tiendaSel = (String) cbTienda.getSelectedItem();
             if (tiendaSel != null && !tiendaSel.equals("-- Ninguna --")) {
                 long tiendaId = Long.parseLong(tiendaSel.split(" - ")[0]);
@@ -317,9 +335,10 @@ public class VerEmpleados extends JPanel {
                 empleadoSeleccionado.setTiendaId(null);
             }
 
-            // Actualizar correo en usuario
+            // Usuario
             if (usuarioSeleccionado != null) {
                 usuarioSeleccionado.setEmail(correo);
+                usuarioSeleccionado.setTipoUsuario(rol);
                 UsuarioController uc = new UsuarioController();
                 uc.actualizar(usuarioSeleccionado);
             }

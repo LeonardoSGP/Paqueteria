@@ -2,8 +2,10 @@ package vista;
 
 import controlador.EmpleadoController;
 import controlador.TiendaController;
+import controlador.UsuarioController;
 import modelo.Empleado;
 import modelo.Tienda;
+import modelo.Usuario;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -39,7 +41,8 @@ public class VerTiendas extends JPanel {
         int fila = 0;
 
         // Código
-        gbc.gridx = 0; gbc.gridy = fila;
+        gbc.gridx = 0;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Código:"), gbc);
         txtCodigo = new JTextField(8);
         txtCodigo.setEditable(false);
@@ -47,14 +50,16 @@ public class VerTiendas extends JPanel {
         panelEdicion.add(txtCodigo, gbc);
 
         // Nombre
-        gbc.gridx = 2; gbc.gridy = fila;
+        gbc.gridx = 2;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Nombre:"), gbc);
         txtNombre = new JTextField(12);
         gbc.gridx = 3;
         panelEdicion.add(txtNombre, gbc);
 
         // Dirección
-        gbc.gridx = 4; gbc.gridy = fila;
+        gbc.gridx = 4;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Dirección:"), gbc);
         txtDireccion = new JTextField(15);
         gbc.gridx = 5;
@@ -62,21 +67,24 @@ public class VerTiendas extends JPanel {
 
         // Teléfono
         fila++;
-        gbc.gridx = 0; gbc.gridy = fila;
+        gbc.gridx = 0;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Teléfono:"), gbc);
         txtTelefono = new JTextField(10);
         gbc.gridx = 1;
         panelEdicion.add(txtTelefono, gbc);
 
         // Correo
-        gbc.gridx = 2; gbc.gridy = fila;
+        gbc.gridx = 2;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Correo:"), gbc);
         txtCorreo = new JTextField(15);
         gbc.gridx = 3;
         panelEdicion.add(txtCorreo, gbc);
 
         // Capacidad
-        gbc.gridx = 4; gbc.gridy = fila;
+        gbc.gridx = 4;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Capacidad:"), gbc);
         txtCapacidad = new JTextField(6);
         gbc.gridx = 5;
@@ -84,21 +92,24 @@ public class VerTiendas extends JPanel {
 
         // Supervisor
         fila++;
-        gbc.gridx = 0; gbc.gridy = fila;
+        gbc.gridx = 0;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Supervisor:"), gbc);
         cbSupervisor = new JComboBox<>(new String[]{"-- Ninguno --"});
         gbc.gridx = 1;
         panelEdicion.add(cbSupervisor, gbc);
 
         // Horarios
-        gbc.gridx = 2; gbc.gridy = fila;
+        gbc.gridx = 2;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Apertura:"), gbc);
         spApertura = new JSpinner(new SpinnerDateModel());
         spApertura.setEditor(new JSpinner.DateEditor(spApertura, "HH:mm"));
         gbc.gridx = 3;
         panelEdicion.add(spApertura, gbc);
 
-        gbc.gridx = 4; gbc.gridy = fila;
+        gbc.gridx = 4;
+        gbc.gridy = fila;
         panelEdicion.add(new JLabel("Cierre:"), gbc);
         spCierre = new JSpinner(new SpinnerDateModel());
         spCierre.setEditor(new JSpinner.DateEditor(spCierre, "HH:mm"));
@@ -107,7 +118,9 @@ public class VerTiendas extends JPanel {
 
         // Botones
         fila++;
-        gbc.gridx = 0; gbc.gridy = fila; gbc.gridwidth = 6;
+        gbc.gridx = 0;
+        gbc.gridy = fila;
+        gbc.gridwidth = 6;
         JPanel panelBtns = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnActualizar = new JButton("Actualizar");
         btnDesactivar = new JButton("Desactivar");
@@ -118,7 +131,7 @@ public class VerTiendas extends JPanel {
         add(panelEdicion, BorderLayout.NORTH);
 
         // === Tabla de tiendas ===
-        String[] columnas = {"Código", "Nombre", "Dirección", "Teléfono", "Correo", "Capacidad", "Activo"};
+        String[] columnas = {"Código", "Nombre", "Dirección", "Teléfono", "Correo", "Capacidad", "Supervisor", "Activo"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -131,11 +144,11 @@ public class VerTiendas extends JPanel {
         tabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
+                    boolean isSelected, boolean hasFocus,
+                    int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-                boolean activo = (boolean) modeloTabla.getValueAt(row, 6);
+                boolean activo = (boolean) modeloTabla.getValueAt(row, 7);
                 if (!activo) {
                     c.setForeground(Color.RED);
                     Font font = c.getFont();
@@ -167,16 +180,31 @@ public class VerTiendas extends JPanel {
     private void cargarTiendas() {
         modeloTabla.setRowCount(0);
         TiendaController tc = new TiendaController();
+        EmpleadoController ec = new EmpleadoController();
+        UsuarioController uc = new UsuarioController();
+
         List<Tienda> lista = tc.listar();
         for (Tienda t : lista) {
+            String supervisorNombre = "";
+            if (t.getGerenteId() != 0) {
+                Empleado e = ec.obtenerPorId(t.getGerenteId());
+                if (e != null) {
+                    Usuario u = uc.obtenerPorId(e.getUsuarioId());
+                    if (u != null && "SUPERVISOR".equalsIgnoreCase(u.getTipoUsuario())) {
+                        supervisorNombre = e.getNombre() + " " + e.getApellidos();
+                    }
+                }
+            }
+
             modeloTabla.addRow(new Object[]{
-                    t.getCodigoTienda(),
-                    t.getNombreTienda(),
-                    t.getDireccionCompleta(),
-                    t.getTelefono(),
-                    t.getEmail(),
-                    t.getCapacidadAlmacen(),
-                    t.isActiva()
+                t.getCodigoTienda(),
+                t.getNombreTienda(),
+                t.getDireccionCompleta(),
+                t.getTelefono(),
+                t.getEmail(),
+                t.getCapacidadAlmacen(),
+                supervisorNombre, // ✅ ahora solo aparecerán supervisores
+                t.isActiva()
             });
         }
     }
@@ -186,10 +214,12 @@ public class VerTiendas extends JPanel {
         cbSupervisor.addItem("-- Ninguno --");
 
         EmpleadoController ec = new EmpleadoController();
+        UsuarioController uc = new UsuarioController();
+
         List<Empleado> empleados = ec.listar();
         for (Empleado e : empleados) {
-            if (e.isActivo() && "SUPERVISOR".equalsIgnoreCase(
-                    new controlador.UsuarioController().obtenerPorId(e.getUsuarioId()).getTipoUsuario())) {
+            Usuario u = uc.obtenerPorId(e.getUsuarioId());
+            if (e.isActivo() && u != null && "SUPERVISOR".equalsIgnoreCase(u.getTipoUsuario())) {
                 cbSupervisor.addItem(e.getId() + " - " + e.getNombre() + " " + e.getApellidos());
             }
         }
@@ -215,14 +245,11 @@ public class VerTiendas extends JPanel {
                 seleccionarSupervisorEnCombo(tiendaSeleccionada.getGerenteId());
 
                 btnDesactivar.setText(tiendaSeleccionada.isActiva() ? "Desactivar" : "Activar");
-
-                // ⭐ Activar/desactivar campos según estado
                 setCamposEditables(tiendaSeleccionada.isActiva());
             }
         }
     }
 
-    // ⭐ Nuevo método para bloquear/habilitar campos
     private void setCamposEditables(boolean editable) {
         txtNombre.setEditable(editable);
         txtDireccion.setEditable(editable);
@@ -252,9 +279,13 @@ public class VerTiendas extends JPanel {
 
     private long getSupervisorIdSeleccionado() {
         Object sel = cbSupervisor.getSelectedItem();
-        if (sel == null) return 0;
+        if (sel == null) {
+            return 0;
+        }
         String s = sel.toString();
-        if (s.startsWith("--")) return 0;
+        if (s.startsWith("--")) {
+            return 0;
+        }
         try {
             return Long.parseLong(s.split(" - ")[0].trim());
         } catch (Exception ex) {
@@ -268,7 +299,6 @@ public class VerTiendas extends JPanel {
             return;
         }
 
-        // Validaciones igual que antes...
         String nombre = txtNombre.getText().trim();
         String direccion = txtDireccion.getText().trim();
         String telefono = txtTelefono.getText().trim();
@@ -317,7 +347,9 @@ public class VerTiendas extends JPanel {
             tc.actualizar(tiendaSeleccionada);
 
             JOptionPane.showMessageDialog(this, "Tienda actualizada correctamente.");
+
             cargarTiendas();
+            reseleccionarTienda(tiendaSeleccionada.getCodigoTienda()); // ⭐ vuelve a marcar la fila editada
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al actualizar: " + ex.getMessage());
         }
@@ -338,9 +370,20 @@ public class VerTiendas extends JPanel {
                     tiendaSeleccionada.isActiva() ? "Tienda activada." : "Tienda desactivada.");
 
             cargarTiendas();
-            cargarSeleccion(); // ⭐ refresca estado de campos
+            cargarSeleccion();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al cambiar estado: " + ex.getMessage());
         }
     }
+
+    private void reseleccionarTienda(String codigoTienda) {
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            if (modeloTabla.getValueAt(i, 0).equals(codigoTienda)) {
+                tabla.setRowSelectionInterval(i, i);
+                cargarSeleccion();
+                break;
+            }
+        }
+    }
+
 }

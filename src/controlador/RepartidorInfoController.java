@@ -9,8 +9,7 @@ public class RepartidorInfoController {
 
     public void insertar(RepartidorInfo r) {
         String sql = "INSERT INTO REPARTIDOR_INFO (empleado_id, licencia_conducir, disponible, calificacion_promedio, latitud_actual, longitud_actual, fecha_actualizacion_ubicacion) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection cn = Conexion.conectar();
-             PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, r.getEmpleadoId());
             ps.setString(2, r.getLicenciaConducir());
             ps.setBoolean(3, r.isDisponible());
@@ -31,8 +30,7 @@ public class RepartidorInfoController {
 
     public RepartidorInfo obtenerPorId(long id) {
         String sql = "SELECT * FROM REPARTIDOR_INFO WHERE id=?";
-        try (Connection cn = Conexion.conectar();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -48,9 +46,7 @@ public class RepartidorInfoController {
     public List<RepartidorInfo> listar() {
         List<RepartidorInfo> lista = new ArrayList<>();
         String sql = "SELECT * FROM REPARTIDOR_INFO";
-        try (Connection cn = Conexion.conectar();
-             PreparedStatement ps = cn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 lista.add(map(rs));
             }
@@ -72,4 +68,18 @@ public class RepartidorInfoController {
         r.setFechaActualizacionUbicacion(rs.getTimestamp("fecha_actualizacion_ubicacion"));
         return r;
     }
+
+    public List<RepartidorInfo> listarDisponibles() {
+        List<RepartidorInfo> lista = new ArrayList<>();
+        String sql = "SELECT * FROM REPARTIDOR_INFO WHERE disponible=1";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(map(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
 }

@@ -9,31 +9,43 @@ public class RepartidorVehiculoController {
 
     public void asignarVehiculo(RepartidorVehiculo rv) {
         String sql = "INSERT INTO REPARTIDOR_VEHICULO (repartidor_id, vehiculo_id, fecha_asignacion) VALUES (?, ?, ?)";
-        try (Connection cn = Conexion.conectar();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setLong(1, rv.getRepartidorId());
-            ps.setLong(2, rv.getVehiculoId());
-            ps.setTimestamp(3, rv.getFechaAsignacion()==null? null : new Timestamp(rv.getFechaAsignacion().getTime()));
-            ps.executeUpdate();
-        } catch (SQLException e) { e.printStackTrace(); }
+        try (Connection cn = Conexion.conectar()) {
+            // Finaliza asignaciones previas si hay activas
+            String finPrevio = "UPDATE REPARTIDOR_VEHICULO SET fecha_fin=NOW() WHERE repartidor_id=? AND vehiculo_id=? AND fecha_fin IS NULL";
+            try (PreparedStatement psFin = cn.prepareStatement(finPrevio)) {
+                psFin.setLong(1, rv.getRepartidorId());
+                psFin.setLong(2, rv.getVehiculoId());
+                psFin.executeUpdate();
+            }
+
+            // Inserta nueva asignación
+            try (PreparedStatement ps = cn.prepareStatement(sql)) {
+                ps.setLong(1, rv.getRepartidorId());
+                ps.setLong(2, rv.getVehiculoId());
+                ps.setTimestamp(3, rv.getFechaAsignacion() == null ? new Timestamp(System.currentTimeMillis()) : new Timestamp(rv.getFechaAsignacion().getTime()));
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void finalizarAsignacion(long repartidorId, long vehiculoId, java.util.Date fechaFin) {
         String sql = "UPDATE REPARTIDOR_VEHICULO SET fecha_fin=? WHERE repartidor_id=? AND vehiculo_id=? AND fecha_fin IS NULL";
-        try (Connection cn = Conexion.conectar();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setTimestamp(1, fechaFin==null? null : new Timestamp(fechaFin.getTime()));
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setTimestamp(1, fechaFin == null ? null : new Timestamp(fechaFin.getTime()));
             ps.setLong(2, repartidorId);
             ps.setLong(3, vehiculoId);
             ps.executeUpdate();
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<RepartidorVehiculo> listarPorRepartidor(long repartidorId) {
         List<RepartidorVehiculo> list = new ArrayList<>();
-        String sql = "SELECT * FROM REPARTIDOR_VEHICULO WHERE repartidor_id=?";
-        try (Connection cn = Conexion.conectar();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM REPARTIDOR_VEHICULO WHERE repartidor_id=? AND fecha_fin IS NULL";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setLong(1, repartidorId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -45,7 +57,10 @@ public class RepartidorVehiculoController {
                     list.add(rv);
                 }
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return list;
     }
+
 }

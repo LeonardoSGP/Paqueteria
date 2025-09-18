@@ -15,7 +15,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -26,11 +25,11 @@ public class IGerente extends javax.swing.JPanel {
     private JPanel submenuEnvios;
     private JPanel submenuPaquetes;
     private JPanel submenuRepartidores;
+    private JPanel submenuVehiculos;
     private JPanel submenuTiendas;
     private JPanel submenuZonas;
     private JPanel submenuReportes;
     private EmpleadoForm empleadoForm;
-    private TiendaForm tiendaForm;
 
     public IGerente() {
         initComponents();
@@ -55,6 +54,7 @@ public class IGerente extends javax.swing.JPanel {
         btnEnvios = new modelo.Button();
         btnPaquetes = new modelo.Button();
         btnRepartidores = new modelo.Button();
+        btnVehiculos = new modelo.Button();
         btnTiendas = new modelo.Button();
         btnZonas = new modelo.Button();
         btnReportes = new modelo.Button();
@@ -169,6 +169,19 @@ public class IGerente extends javax.swing.JPanel {
         btnRepartidores.setIconTextGap(20);
         panel_menu.add(btnRepartidores);
 
+        btnVehiculos.setBackground(new java.awt.Color(255, 153, 51));
+        btnVehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/vehiculo.png"))); // NOI18N
+        btnVehiculos.setText("Vehiculos");
+        btnVehiculos.setColorNormal(new java.awt.Color(255, 153, 51));
+        btnVehiculos.setColorPressed(new java.awt.Color(255, 153, 51));
+        btnVehiculos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnVehiculos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVehiculosActionPerformed(evt);
+            }
+        });
+        panel_menu.add(btnVehiculos);
+
         btnTiendas.setBackground(new java.awt.Color(255, 153, 51));
         btnTiendas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/tienda.png"))); // NOI18N
         btnTiendas.setText("Tiendas");
@@ -276,6 +289,10 @@ public class IGerente extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_button2ActionPerformed
 
+    private void btnVehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehiculosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVehiculosActionPerformed
+
     private void configurarMenu() {
         // === SUBMENÚ DE EMPLEADOS ===
         submenuEmpleados = new JPanel();
@@ -309,87 +326,55 @@ public class IGerente extends javax.swing.JPanel {
         submenuClientes.setBackground(new Color(255, 153, 51));
         submenuClientes.setVisible(false);
 
-        //Registra el cliente
-        JButton botonRegistrarCliente = crearSubBoton("Registrar Cliente");
-        botonRegistrarCliente.addActionListener(e -> {
-            ClienteForm clienteForm = new ClienteForm(); // Tu formulario de cliente
-            mostrarPanelEnContenido(clienteForm);
-        });
-        submenuClientes.add(botonRegistrarCliente);
-        //ver clientes
-        JButton botonVerClientes = crearSubBoton("Ver Clientes");
-        botonVerClientes.addActionListener(e -> {
-            mostrarPanelEnContenido(new ListarClientes());
-        });
-        submenuClientes.add(botonVerClientes);
+        submenuClientes.add(crearSubBoton("Registrar Cliente"));
+        submenuClientes.add(crearSubBoton("Ver Clientes"));
+        submenuClientes.add(crearSubBoton("Historial de Envios"));
 
-        // Historial de clientes
-        JButton botonHistorial = crearSubBoton("Historial de Envios");
-        botonHistorial.addActionListener(e -> {
-            mostrarPanelEnContenido(new HistorialClienteEnvios());
-        });
-        submenuClientes.add(botonHistorial);
-
-        //Submenú Envios
+        // Submenú Envios
         submenuEnvios = new JPanel();
         submenuEnvios.setLayout(new BoxLayout(submenuEnvios, BoxLayout.Y_AXIS));
         submenuEnvios.setBackground(new Color(255, 153, 51));
         submenuEnvios.setVisible(false);
-
-        // Crear Envío
-        JButton botonCrearEnvio = crearSubBoton("Crear Envio");
-        botonCrearEnvio.addActionListener(e -> {
-            mostrarPanelEnContenido(new EnvioForm());
-        });
-        submenuEnvios.add(botonCrearEnvio);
-
-        // Ver Envíos
-        JButton botonVerEnvios = crearSubBoton("Ver Envios");
-        botonVerEnvios.addActionListener(e -> {
-            mostrarPanelEnContenido(new ListaEnvios());
-        });
-        submenuEnvios.add(botonVerEnvios);
-
-        // Seguimiento
-        JButton botonSeguimiento = crearSubBoton("Seguimiento");
-        botonSeguimiento.addActionListener(e -> {
-            mostrarPanelEnContenido(new SeguimientoEnvio());
-        });
-        submenuEnvios.add(botonSeguimiento);
+        submenuEnvios.add(crearSubBoton("Crear Envio"));
+        submenuEnvios.add(crearSubBoton("Ver Envios"));
+        submenuEnvios.add(crearSubBoton("Seguimiento"));
+        submenuEnvios.add(crearSubBoton("Reporte de Envios"));
 
         // Submenú Paquetes
         submenuPaquetes = new JPanel();
         submenuPaquetes.setLayout(new BoxLayout(submenuPaquetes, BoxLayout.Y_AXIS));
         submenuPaquetes.setBackground(new Color(255, 153, 51));
         submenuPaquetes.setVisible(false);
-
-// Registrar Paquete
-        JButton botonRegistrarPaquete = crearSubBoton("Registrar Paquete");
-        botonRegistrarPaquete.addActionListener(e -> {
-            mostrarPanelEnContenido(new PaqueteForm());
-        });
-        submenuPaquetes.add(botonRegistrarPaquete);
-
-        // Ver Paquetes
-        JButton botonVerPaquetes = crearSubBoton("Ver Paquetes");
-        botonVerPaquetes.addActionListener(e -> {
-            mostrarPanelEnContenido(new ListarPaquetes());
-        });
-        submenuPaquetes.add(botonVerPaquetes);
-
-        // Reporte de Paquetes
-        JButton botonReportePaquetes = crearSubBoton("Reporte de Paquetes");
-        botonReportePaquetes.addActionListener(e -> {
-            mostrarPanelEnContenido(new ReportePaquetes());
-        });
-        submenuPaquetes.add(botonReportePaquetes);
+        submenuPaquetes.add(crearSubBoton("Registrar Paquete"));
+        submenuPaquetes.add(crearSubBoton("Ver Paquetes"));
+        submenuPaquetes.add(crearSubBoton("Reporte de Paquetes"));
 
         // Submenú Repartidores
         submenuRepartidores = new JPanel();
         submenuRepartidores.setLayout(new BoxLayout(submenuRepartidores, BoxLayout.Y_AXIS));
         submenuRepartidores.setBackground(new Color(255, 153, 51));
         submenuRepartidores.setVisible(false);
-        submenuRepartidores.add(crearSubBoton("Ver Repartidores"));
+        JButton botonVerRepartidores = crearSubBoton("Ver Repartidores");
+        botonVerRepartidores.addActionListener(e -> {
+            mostrarPanelEnContenido(new VerRepartidores());
+        });
+        submenuRepartidores.add(botonVerRepartidores);
+
+        // Submenú Vehiculos
+        submenuVehiculos = new JPanel();
+        submenuVehiculos.setLayout(new BoxLayout(submenuVehiculos, BoxLayout.Y_AXIS));
+        submenuVehiculos.setBackground(new Color(255, 153, 51));
+        submenuVehiculos.setVisible(false);
+        JButton botonRegistrarVehiculo = crearSubBoton("Registrar Vehiculo");
+        botonRegistrarVehiculo.addActionListener(e -> {
+            mostrarPanelEnContenido(new VehiculoForm());
+        });
+        submenuVehiculos.add(botonRegistrarVehiculo);
+        JButton botonVerVehiculos = crearSubBoton("Ver Vehiculos");
+        botonVerVehiculos.addActionListener(e -> {
+            mostrarPanelEnContenido(new VerVehiculos());
+        });
+        submenuVehiculos.add(botonVerVehiculos);
 
         // Submenú Tiendas
         submenuTiendas = new JPanel();
@@ -398,10 +383,7 @@ public class IGerente extends javax.swing.JPanel {
         submenuTiendas.setVisible(false);
         JButton botonRegistrarTienda = crearSubBoton("Registrar Tienda");
         botonRegistrarTienda.addActionListener(e -> {
-            if (tiendaForm == null) {
-                tiendaForm = new TiendaForm();
-            }
-            mostrarPanelEnContenido(tiendaForm);
+            mostrarPanelEnContenido(new TiendaForm());
         });
         submenuTiendas.add(botonRegistrarTienda);
         JButton botonVerTiendas = crearSubBoton("Ver Tiendas");
@@ -415,18 +397,30 @@ public class IGerente extends javax.swing.JPanel {
         submenuZonas.setLayout(new BoxLayout(submenuZonas, BoxLayout.Y_AXIS));
         submenuZonas.setBackground(new Color(255, 153, 51));
         submenuZonas.setVisible(false);
-        submenuZonas.add(crearSubBoton("Registrar Zonas"));
-        submenuZonas.add(crearSubBoton("Ver Zonas"));
+        JButton botonRegistrarZona = crearSubBoton("Registrar Zona");
+        botonRegistrarZona.addActionListener(e -> {
+            mostrarPanelEnContenido(new ZonaForm());
+        });
+        submenuZonas.add(botonRegistrarZona);
+        JButton botonVerZonas = crearSubBoton("Ver Zonas");
+        botonVerZonas.addActionListener(e -> {
+            mostrarPanelEnContenido(new VerZonas());
+        });
+        submenuZonas.add(botonVerZonas);
 
         // Submenú Reportes
         submenuReportes = new JPanel();
         submenuReportes.setLayout(new BoxLayout(submenuReportes, BoxLayout.Y_AXIS));
         submenuReportes.setBackground(new Color(255, 153, 51));
         submenuReportes.setVisible(false);
-        submenuReportes.add(crearSubBoton("Ingresos"));
-        submenuReportes.add(crearSubBoton("Clientes Frecuentes"));
-        submenuReportes.add(crearSubBoton("Incidencias"));
-        submenuReportes.add(crearSubBoton("Estadísticas Generales"));
+
+        JButton botonVistaReportes = crearSubBoton("Vista de Reportes");
+        botonVistaReportes.addActionListener(e -> {
+            mostrarPanelEnContenido(new VistaReportes());
+        });
+        submenuReportes.add(botonVistaReportes);
+
+   
 
         // Inserta los submenus en el panel_menu según corresponda,
         panel_menu.add(submenuEmpleados, 2);
@@ -434,9 +428,10 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(submenuEnvios, 6);
         panel_menu.add(submenuPaquetes, 8);
         panel_menu.add(submenuRepartidores, 10);
-        panel_menu.add(submenuTiendas, 12);
-        panel_menu.add(submenuZonas, 14);
-        panel_menu.add(submenuReportes, 16);
+        panel_menu.add(submenuVehiculos, 12);
+        panel_menu.add(submenuTiendas, 14);
+        panel_menu.add(submenuZonas, 16);
+        panel_menu.add(submenuReportes, 18);
 
         // Asignar listeners tipo acordeón para mostrar/ocultar submenús
         btnEmpleados.addActionListener(e -> toggleSubmenu(submenuEmpleados));
@@ -444,6 +439,7 @@ public class IGerente extends javax.swing.JPanel {
         btnEnvios.addActionListener(e -> toggleSubmenu(submenuEnvios));
         btnPaquetes.addActionListener(e -> toggleSubmenu(submenuPaquetes));
         btnRepartidores.addActionListener(e -> toggleSubmenu(submenuRepartidores));
+        btnVehiculos.addActionListener(e -> toggleSubmenu(submenuVehiculos));
         btnTiendas.addActionListener(e -> toggleSubmenu(submenuTiendas));
         btnZonas.addActionListener(e -> toggleSubmenu(submenuZonas));
         btnReportes.addActionListener(e -> toggleSubmenu(submenuReportes));
@@ -454,7 +450,7 @@ public class IGerente extends javax.swing.JPanel {
     private void toggleSubmenu(JPanel target) {
         for (JPanel submenu : List.of(
                 submenuEmpleados, submenuClientes, submenuEnvios, submenuPaquetes,
-                submenuRepartidores, submenuTiendas, submenuZonas, submenuReportes
+                submenuRepartidores, submenuVehiculos, submenuTiendas, submenuZonas, submenuReportes
         )) {
             if (submenu == target) {
                 submenu.setVisible(!submenu.isVisible());
@@ -497,6 +493,7 @@ public class IGerente extends javax.swing.JPanel {
     private modelo.Button btnRepartidores;
     private modelo.Button btnReportes;
     private modelo.Button btnTiendas;
+    private modelo.Button btnVehiculos;
     private modelo.Button btnZonas;
     private modelo.Button button1;
     private modelo.Button button2;

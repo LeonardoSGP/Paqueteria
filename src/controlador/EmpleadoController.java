@@ -5,6 +5,7 @@ import modelo.Empleado;
 import modelo.EmpleadoPuesto;
 import java.sql.*;
 import java.util.*;
+import modelo.Usuario;
 
 public class EmpleadoController {
 
@@ -258,5 +259,50 @@ public class EmpleadoController {
         }
         return "EMP001"; // si no hay empleados, empezar en EMP001
     }
+
+    public Empleado obtenerPorUsuarioId(long usuarioId) {
+        String sql = "SELECT * FROM EMPLEADO WHERE usuario_id=?";
+        try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setLong(1, usuarioId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return map(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public void actualizar(Usuario u) {
+    String sql = "UPDATE USUARIO SET username=?, password_hash=?, email=?, tipo_usuario=?, activo=? WHERE id=?";
+    try (Connection cn = Conexion.conectar(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setString(1, u.getUsername());
+        ps.setString(2, u.getPasswordHash());
+        ps.setString(3, u.getEmail());
+        ps.setString(4, u.getTipoUsuario());
+        ps.setBoolean(5, u.isActivo());
+        ps.setLong(6, u.getId());
+        ps.executeUpdate();
+
+        // 🔑 Si ya no es REPARTIDOR, desactivar asignaciones
+        if (!"REPARTIDOR".equalsIgnoreCase(u.getTipoUsuario())) {
+            EmpleadoController ec = new EmpleadoController();
+            Empleado emp = ec.obtenerPorUsuarioId(u.getId());
+            if (emp != null) {
+                try (PreparedStatement ps2 = cn.prepareStatement(
+                        "UPDATE ZONA_REPARTIDOR SET activo=0 WHERE repartidor_id=?")) {
+                    ps2.setLong(1, emp.getId()); // 👈 Ojo: aquí usas el ID del EMPLEADO, no del usuario
+                    ps2.executeUpdate();
+                }
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+    
+
 
 }
