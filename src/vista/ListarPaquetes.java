@@ -1,23 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
 
-/**
- *
- * @author Diego Quiroga
- */
 import controlador.ClienteController;
 import controlador.PaqueteController;
 import modelo.Paquete;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import modelo.Cliente;
 
 public class ListarPaquetes extends JPanel {
 
@@ -39,17 +31,17 @@ public class ListarPaquetes extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // Panel superior con título y filtros
+        // ======= PANEL SUPERIOR (Título + Filtros + Botones arriba) =======
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setBackground(Color.WHITE);
-        panelSuperior.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
+        panelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JLabel lblTitulo = new JLabel("📦 Lista de Paquetes", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitulo.setForeground(new Color(0, 123, 255));
         panelSuperior.add(lblTitulo, BorderLayout.NORTH);
 
-        // Panel de filtros
+        // Filtros
         JPanel panelFiltros = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelFiltros.setBackground(Color.WHITE);
 
@@ -58,7 +50,7 @@ public class ListarPaquetes extends JPanel {
         txtBuscarCodigo = new JTextField(15);
         txtBuscarCodigo.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        JLabel lblFiltro = new JLabel("Filtrar por tipo:");
+        JLabel lblFiltro = new JLabel("   Filtrar por tipo:");
         lblFiltro.setFont(new Font("Arial", Font.PLAIN, 14));
         cbFiltroTipo = new JComboBox<>(new String[]{
             "TODOS", "DOCUMENTOS", "ROPA", "ELECTRODOMESTICOS",
@@ -74,50 +66,15 @@ public class ListarPaquetes extends JPanel {
 
         panelFiltros.add(lblBuscar);
         panelFiltros.add(txtBuscarCodigo);
-        panelFiltros.add(Box.createHorizontalStrut(20));
         panelFiltros.add(lblFiltro);
         panelFiltros.add(cbFiltroTipo);
         panelFiltros.add(btnFiltrar);
 
         panelSuperior.add(panelFiltros, BorderLayout.CENTER);
-        add(panelSuperior, BorderLayout.NORTH);
 
-        // Tabla de paquetes
-        String[] columnas = {"ID", "Código", "Descripción", "Tipo", "Peso (kg)", "Dimensiones", "Volumen (cm³)", "Frágil", "Seguro", "Valor ($)", "Fecha Creación", "Estado"};
-        modeloTabla = new DefaultTableModel(columnas, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        tablaPaquetes = new JTable(modeloTabla);
-        tablaPaquetes.setFont(new Font("Arial", Font.PLAIN, 12));
-        tablaPaquetes.setRowHeight(25);
-        tablaPaquetes.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-        tablaPaquetes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        // Ajustar anchos de columnas
-        tablaPaquetes.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
-        tablaPaquetes.getColumnModel().getColumn(1).setPreferredWidth(80);  // Código
-        tablaPaquetes.getColumnModel().getColumn(2).setPreferredWidth(150); // Descripción
-        tablaPaquetes.getColumnModel().getColumn(3).setPreferredWidth(120); // Tipo
-        tablaPaquetes.getColumnModel().getColumn(4).setPreferredWidth(80);  // Peso
-        tablaPaquetes.getColumnModel().getColumn(5).setPreferredWidth(100); // Dimensiones
-        tablaPaquetes.getColumnModel().getColumn(6).setPreferredWidth(100); // Volumen
-        tablaPaquetes.getColumnModel().getColumn(7).setPreferredWidth(60);  // Frágil
-        tablaPaquetes.getColumnModel().getColumn(8).setPreferredWidth(60);  // Seguro
-        tablaPaquetes.getColumnModel().getColumn(9).setPreferredWidth(80);  // Valor
-        tablaPaquetes.getColumnModel().getColumn(10).setPreferredWidth(120); // Fecha
-        tablaPaquetes.getColumnModel().getColumn(11).setPreferredWidth(80); // Estado
-
-        scrollPane = new JScrollPane(tablaPaquetes);
-        scrollPane.setPreferredSize(new Dimension(1200, 400));
-        add(scrollPane, BorderLayout.CENTER);
-
-        // Panel de botones
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(Color.WHITE);
+        // Botones de acción (arriba, siempre visibles)
+        JPanel panelBotonesArriba = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelBotonesArriba.setBackground(Color.WHITE);
 
         btnRefrescar = new JButton("🔄 Refrescar");
         btnRefrescar.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -137,11 +94,56 @@ public class ListarPaquetes extends JPanel {
         btnEliminar.setForeground(Color.WHITE);
         btnEliminar.addActionListener(e -> eliminarPaquete());
 
-        panelBotones.add(btnRefrescar);
-        panelBotones.add(btnEditar);
-        panelBotones.add(btnEliminar);
+        panelBotonesArriba.add(btnRefrescar);
+        panelBotonesArriba.add(btnEditar);
+        panelBotonesArriba.add(btnEliminar);
 
-        add(panelBotones, BorderLayout.SOUTH);
+        panelSuperior.add(panelBotonesArriba, BorderLayout.SOUTH);
+
+        // Agregamos bloque superior completo (título, filtros, botones)
+        add(panelSuperior, BorderLayout.NORTH);
+
+        // ======= TABLA (con scroll vertical y horizontal si es necesario) =======
+        String[] columnas = {
+            "ID", "Código", "Descripción", "Tipo", "Peso (kg)", "Dimensiones",
+            "Volumen (cm³)", "Frágil", "Seguro", "Valor ($)", "Fecha Creación", "Estado"
+        };
+
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tablaPaquetes = new JTable(modeloTabla);
+        tablaPaquetes.setFont(new Font("Arial", Font.PLAIN, 12));
+        tablaPaquetes.setRowHeight(25);
+        tablaPaquetes.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        tablaPaquetes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Desactivar auto-resize para que aparezca scroll horizontal
+        tablaPaquetes.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        // Ajustar anchos de columnas
+        tablaPaquetes.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tablaPaquetes.getColumnModel().getColumn(1).setPreferredWidth(80);
+        tablaPaquetes.getColumnModel().getColumn(2).setPreferredWidth(150);
+        tablaPaquetes.getColumnModel().getColumn(3).setPreferredWidth(120);
+        tablaPaquetes.getColumnModel().getColumn(4).setPreferredWidth(80);
+        tablaPaquetes.getColumnModel().getColumn(5).setPreferredWidth(100);
+        tablaPaquetes.getColumnModel().getColumn(6).setPreferredWidth(100);
+        tablaPaquetes.getColumnModel().getColumn(7).setPreferredWidth(60);
+        tablaPaquetes.getColumnModel().getColumn(8).setPreferredWidth(60);
+        tablaPaquetes.getColumnModel().getColumn(9).setPreferredWidth(80);
+        tablaPaquetes.getColumnModel().getColumn(10).setPreferredWidth(120);
+        tablaPaquetes.getColumnModel().getColumn(11).setPreferredWidth(80);
+
+        scrollPane = new JScrollPane(tablaPaquetes);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void cargarPaquetes() {
@@ -301,5 +303,5 @@ public class ListarPaquetes extends JPanel {
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }    
+    }
 }

@@ -323,4 +323,3 @@ public class ReportePaquetes extends JPanel {
         }
     }
 }
-
