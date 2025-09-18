@@ -75,6 +75,7 @@ public class IGerente extends javax.swing.JPanel {
         izq.setLayout(new java.awt.BorderLayout());
 
         button1.setBackground(new java.awt.Color(255, 153, 51));
+        button1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/menu.png"))); // NOI18N
         button1.setColorNormal(new java.awt.Color(255, 153, 51));
         button1.setColorPressed(new java.awt.Color(255, 153, 51));
         button1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -120,6 +121,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(jLabel1);
 
         btnEmpleados.setBackground(new java.awt.Color(255, 153, 51));
+        btnEmpleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Empleados.png"))); // NOI18N
         btnEmpleados.setText("Empleados");
         btnEmpleados.setAlignmentY(0.0F);
         btnEmpleados.setColorNormal(new java.awt.Color(255, 153, 51));
@@ -129,6 +131,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnEmpleados);
 
         btnClientes.setBackground(new java.awt.Color(255, 153, 51));
+        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/clientes.png"))); // NOI18N
         btnClientes.setText("Clientes");
         btnClientes.setAlignmentY(0.0F);
         btnClientes.setBorderPainted(false);
@@ -139,6 +142,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnClientes);
 
         btnEnvios.setBackground(new java.awt.Color(255, 153, 51));
+        btnEnvios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/envio.png"))); // NOI18N
         btnEnvios.setText("Envios");
         btnEnvios.setToolTipText("");
         btnEnvios.setColorNormal(new java.awt.Color(255, 153, 51));
@@ -148,6 +152,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnEnvios);
 
         btnPaquetes.setBackground(new java.awt.Color(255, 153, 51));
+        btnPaquetes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/paquete.png"))); // NOI18N
         btnPaquetes.setText("Paquetes");
         btnPaquetes.setColorNormal(new java.awt.Color(255, 153, 51));
         btnPaquetes.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -156,6 +161,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnPaquetes);
 
         btnRepartidores.setBackground(new java.awt.Color(255, 153, 51));
+        btnRepartidores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/repartidor.png"))); // NOI18N
         btnRepartidores.setText("Repartidores");
         btnRepartidores.setColorNormal(new java.awt.Color(255, 153, 51));
         btnRepartidores.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -164,6 +170,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnRepartidores);
 
         btnTiendas.setBackground(new java.awt.Color(255, 153, 51));
+        btnTiendas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/tienda.png"))); // NOI18N
         btnTiendas.setText("Tiendas");
         btnTiendas.setColorNormal(new java.awt.Color(255, 153, 51));
         btnTiendas.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -172,6 +179,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnTiendas);
 
         btnZonas.setBackground(new java.awt.Color(255, 153, 51));
+        btnZonas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/zona.png"))); // NOI18N
         btnZonas.setText("Zonas");
         btnZonas.setToolTipText("");
         btnZonas.setColorNormal(new java.awt.Color(255, 153, 51));
@@ -181,6 +189,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnZonas);
 
         btnReportes.setBackground(new java.awt.Color(255, 153, 51));
+        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/reporte.png"))); // NOI18N
         btnReportes.setText("Reportes");
         btnReportes.setColorNormal(new java.awt.Color(255, 153, 51));
         btnReportes.setColorPressed(new java.awt.Color(255, 153, 51));
@@ -189,6 +198,7 @@ public class IGerente extends javax.swing.JPanel {
         panel_menu.add(btnReportes);
 
         button2.setBackground(new java.awt.Color(255, 153, 51));
+        button2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cerrar.png"))); // NOI18N
         button2.setText("Cerrar Sesion");
         button2.setAlignmentY(0.0F);
         button2.setBorderPainted(false);

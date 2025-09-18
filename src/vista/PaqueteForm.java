@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
-
-/**
- *
- * @author Diego Quiroga
- */
 
 import controlador.PaqueteController;
 import modelo.Paquete;
@@ -34,7 +25,7 @@ public class PaqueteForm extends JPanel {
     }
     
     private void initComponents() {
-        // Panel principal con scroll
+        // Panel principal con GridBagLayout
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -54,7 +45,7 @@ public class PaqueteForm extends JPanel {
         
         gbc.gridwidth = 1; // Resetear
         
-        // Código de paquete (generado automáticamente)
+        // Código de paquete
         gbc.gridx = 0; gbc.gridy = 1;
         mainPanel.add(new JLabel("Código Paquete:"), gbc);
         
@@ -66,7 +57,7 @@ public class PaqueteForm extends JPanel {
         gbc.gridx = 1; gbc.gridwidth = 2;
         mainPanel.add(txtCodigoPaquete, gbc);
         
-        gbc.gridwidth = 1; // Resetear
+        gbc.gridwidth = 1; 
         
         // Descripción
         gbc.gridx = 0; gbc.gridy = 2;
@@ -76,7 +67,7 @@ public class PaqueteForm extends JPanel {
         gbc.gridx = 1; gbc.gridwidth = 2;
         mainPanel.add(txtDescripcion, gbc);
         
-        gbc.gridwidth = 1; // Resetear
+        gbc.gridwidth = 1; 
         
         // Tipo de contenido
         gbc.gridx = 0; gbc.gridy = 3;
@@ -89,7 +80,7 @@ public class PaqueteForm extends JPanel {
         gbc.gridx = 1; gbc.gridwidth = 2;
         mainPanel.add(cbTipoContenido, gbc);
         
-        gbc.gridwidth = 1; // Resetear
+        gbc.gridwidth = 1; 
         
         // Peso
         gbc.gridx = 0; gbc.gridy = 4;
@@ -130,7 +121,7 @@ public class PaqueteForm extends JPanel {
         gbc.gridx = 2;
         mainPanel.add(btnCalcularVolumen, gbc);
         
-        // Label para mostrar volumen
+        // Label volumen
         gbc.gridx = 0; gbc.gridy = 8;
         mainPanel.add(new JLabel("Volumen:"), gbc);
         lblVolumen = new JLabel("0.00 cm³");
@@ -172,8 +163,8 @@ public class PaqueteForm extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollObs, gbc);
         
-        // Panel de botones
-        JPanel panelBotones = new JPanel(new FlowLayout());
+        // ---- Panel de botones (SE SACA DEL MAIN PANEL) ----
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.setBackground(Color.WHITE);
         
         btnGuardar = new JButton("💾 Guardar Paquete");
@@ -193,14 +184,13 @@ public class PaqueteForm extends JPanel {
         panelBotones.add(btnGuardar);
         panelBotones.add(btnLimpiar);
         
-        gbc.gridx = 0; gbc.gridy = 12; gbc.gridwidth = 3;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(panelBotones, gbc);
-        
-        // Agregar panel principal con scroll
+        // Scroll del formulario
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
+        // Agregamos: formulario en el centro y botones abajo
         add(scrollPane, BorderLayout.CENTER);
+        add(panelBotones, BorderLayout.SOUTH);
     }
     
     private void calcularVolumen(ActionEvent evt) {
@@ -236,7 +226,6 @@ public class PaqueteForm extends JPanel {
         String tipoContenido = (String) cbTipoContenido.getSelectedItem();
         String observaciones = txtObservaciones.getText().trim();
         
-        // Validaciones
         if (descripcion.isEmpty() || pesoStr.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                 "La descripción y el peso son obligatorios.",
@@ -248,9 +237,7 @@ public class PaqueteForm extends JPanel {
         
         try {
             peso = Double.parseDouble(pesoStr);
-            if (peso <= 0) {
-                throw new NumberFormatException("El peso debe ser mayor a 0");
-            }
+            if (peso <= 0) throw new NumberFormatException();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this,
                 "El peso debe ser un número válido mayor a 0.",
@@ -258,40 +245,17 @@ public class PaqueteForm extends JPanel {
             return;
         }
         
-        // Validar dimensiones si están llenas
-        if (!largoStr.isEmpty()) {
-            try {
-                largo = Double.parseDouble(largoStr);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "El largo debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
+        try { if (!largoStr.isEmpty()) largo = Double.parseDouble(largoStr); } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El largo debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE); return; }
         
-        if (!anchoStr.isEmpty()) {
-            try {
-                ancho = Double.parseDouble(anchoStr);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "El ancho debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
+        try { if (!anchoStr.isEmpty()) ancho = Double.parseDouble(anchoStr); } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El ancho debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE); return; }
         
-        if (!altoStr.isEmpty()) {
-            try {
-                alto = Double.parseDouble(altoStr);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "El alto debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
+        try { if (!altoStr.isEmpty()) alto = Double.parseDouble(altoStr); } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El alto debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE); return; }
         
-        try {
-            valorDeclarado = Double.parseDouble(valorDeclaradoStr);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El valor declarado debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        try { valorDeclarado = Double.parseDouble(valorDeclaradoStr); } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El valor declarado debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE); return; }
         
         PaqueteController paqueteCtrl = new PaqueteController();
         if (paqueteCtrl.existeCodigoPaquete(codigoPaquete)) {

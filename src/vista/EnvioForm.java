@@ -5,9 +5,10 @@ import controlador.ClienteController;
 import controlador.PaqueteController;
 import modelo.Envio;
 import modelo.Cliente;
-import modelo.Paquete;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.DefaultListCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
@@ -43,7 +44,7 @@ public class EnvioForm extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // Panel principal con scroll
+        // Panel principal con GridBagLayout (va dentro de un JScrollPane)
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -62,7 +63,6 @@ public class EnvioForm extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 4;
         mainPanel.add(titulo, gbc);
-
         gbc.gridwidth = 1; // Reset
 
         // Número de seguimiento
@@ -77,7 +77,6 @@ public class EnvioForm extends JPanel {
         gbc.gridx = 1;
         gbc.gridwidth = 3;
         mainPanel.add(txtNumeroSeguimiento, gbc);
-
         gbc.gridwidth = 1; // Reset
 
         // Panel de Clientes
@@ -95,7 +94,6 @@ public class EnvioForm extends JPanel {
         panelClientes.add(new JLabel("Remitente:"), gbcClientes);
         cbRemitente = new JComboBox<>();
         cbRemitente.setRenderer(new ClienteComboRenderer());
-
         cbRemitente.setFont(fuente);
         gbcClientes.gridx = 1;
         panelClientes.add(cbRemitente, gbcClientes);
@@ -114,7 +112,6 @@ public class EnvioForm extends JPanel {
         gbc.gridy = 2;
         gbc.gridwidth = 4;
         mainPanel.add(panelClientes, gbc);
-
         gbc.gridwidth = 1; // Reset
 
         // Panel de Direcciones
@@ -154,7 +151,6 @@ public class EnvioForm extends JPanel {
         gbc.gridy = 3;
         gbc.gridwidth = 4;
         mainPanel.add(panelDirecciones, gbc);
-
         gbc.gridwidth = 1; // Reset
 
         // Tipo de envío y prioridad
@@ -223,7 +219,6 @@ public class EnvioForm extends JPanel {
         gbc.gridy = 5;
         gbc.gridwidth = 4;
         mainPanel.add(panelCostos, gbc);
-
         gbc.gridwidth = 1; // Reset
 
         // Fecha de entrega estimada
@@ -239,7 +234,6 @@ public class EnvioForm extends JPanel {
         gbc.gridx = 1;
         gbc.gridwidth = 3;
         mainPanel.add(spnFechaEntrega, gbc);
-
         gbc.gridwidth = 1; // Reset
 
         // Observaciones
@@ -256,8 +250,13 @@ public class EnvioForm extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollObs, gbc);
 
-        // Panel de botones
-        JPanel panelBotones = new JPanel(new FlowLayout());
+        // Scroll para el panel principal
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // ---------- Panel de botones FIJO en la parte inferior (solo UI) ----------
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.setBackground(Color.WHITE);
 
         btnGuardar = new JButton("💾 Crear Envío");
@@ -277,16 +276,7 @@ public class EnvioForm extends JPanel {
         panelBotones.add(btnGuardar);
         panelBotones.add(btnLimpiar);
 
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        gbc.gridwidth = 4;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(panelBotones, gbc);
-
-        // Scroll para el panel principal
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPane, BorderLayout.CENTER);
+        add(panelBotones, BorderLayout.SOUTH);
     }
 
     private void cargarClientes() {
@@ -428,22 +418,21 @@ public class EnvioForm extends JPanel {
 
         txtObservaciones.setText("");
     }
-}
 
-// Clase interna para mostrar clientes en ComboBox
-class ClienteComboRenderer extends DefaultListCellRenderer {
-
-    @Override
-    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-        if (value instanceof Cliente) {
-            Cliente cliente = (Cliente) value;
-            setText(cliente.getCodigoCliente() + " - " + cliente.getNombre() + " " + cliente.getApellidos());
-        } else if (value == null) {
-            setText("-- Seleccionar Cliente --");
+    // Render para mostrar clientes en JComboBox (UI only)
+    private static class ClienteComboRenderer extends DefaultListCellRenderer {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                      boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value instanceof Cliente) {
+                Cliente cliente = (Cliente) value;
+                setText(cliente.getCodigoCliente() + " - " + cliente.getNombre() + " " + cliente.getApellidos());
+            } else if (value == null) {
+                setText("-- Seleccionar Cliente --");
+            }
+            setHorizontalAlignment(CENTER); // centrado (UI)
+            return this;
         }
-
-        return this;
     }
 }
