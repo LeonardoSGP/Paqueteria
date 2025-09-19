@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS sistema_envios;
+CREATE DATABASE sistema_envios;
 USE sistema_envios;
 
 CREATE TABLE USUARIO (
@@ -11,25 +11,6 @@ CREATE TABLE USUARIO (
     ultimo_acceso DATETIME,
     activo BOOLEAN DEFAULT TRUE
 );
-
-CREATE TABLE TIPO_CLIENTE (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) UNIQUE NOT NULL,
-    descripcion VARCHAR(255),
-    descuento_default DECIMAL(5,2) DEFAULT 0,
-    credito_limite DECIMAL(10,2) DEFAULT 0,
-    activo BOOLEAN DEFAULT TRUE
-);
-
-CREATE TABLE PUESTO_EMPLEADO (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) UNIQUE NOT NULL,
-    descripcion VARCHAR(255),
-    salario_base DECIMAL(10,2) NOT NULL,
-    permisos_json TEXT,
-    activo BOOLEAN DEFAULT TRUE
-);
-
 CREATE TABLE VEHICULO (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     placas VARCHAR(15) UNIQUE NOT NULL,
@@ -69,19 +50,6 @@ CREATE TABLE EMPLEADO (
     FOREIGN KEY (usuario_id) REFERENCES USUARIO(id),
     FOREIGN KEY (supervisor_id) REFERENCES EMPLEADO(id)
 );
-
-CREATE TABLE REPARTIDOR_INFO (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    empleado_id BIGINT UNIQUE NOT NULL,
-    licencia_conducir VARCHAR(20) UNIQUE NOT NULL,
-    disponible BOOLEAN DEFAULT TRUE,
-    calificacion_promedio DECIMAL(3,2) DEFAULT 0,
-    latitud_actual DECIMAL(10,8),
-    longitud_actual DECIMAL(11,8),
-    fecha_actualizacion_ubicacion DATETIME,
-    FOREIGN KEY (empleado_id) REFERENCES EMPLEADO(id)
-);
-
 CREATE TABLE TIENDA (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     codigo_tienda VARCHAR(20) UNIQUE NOT NULL,
@@ -95,17 +63,6 @@ CREATE TABLE TIENDA (
     capacidad_almacen INT,
     activa BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (gerente_id) REFERENCES EMPLEADO(id)
-);
-
-CREATE TABLE EMPLEADO_PUESTO (
-    empleado_id BIGINT,
-    puesto_id INT,
-    fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    fecha_fin DATETIME,
-    activo BOOLEAN DEFAULT TRUE,
-    PRIMARY KEY (empleado_id, puesto_id),
-    FOREIGN KEY (empleado_id) REFERENCES EMPLEADO(id),
-    FOREIGN KEY (puesto_id) REFERENCES PUESTO_EMPLEADO(id)
 );
 
 CREATE TABLE REPARTIDOR_VEHICULO (
@@ -195,53 +152,16 @@ CREATE TABLE ENVIO_PAQUETE (
     FOREIGN KEY (envio_id) REFERENCES ENVIO(id),
     FOREIGN KEY (paquete_id) REFERENCES PAQUETE(id)
 );
-
-CREATE TABLE MOVIMIENTO_RASTREO (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    envio_id BIGINT NOT NULL,
-    fecha_movimiento DATETIME DEFAULT CURRENT_TIMESTAMP,
-    ubicacion VARCHAR(255) NOT NULL,
-    descripcion TEXT,
-    estado_anterior VARCHAR(30),
-    estado_nuevo VARCHAR(30) NOT NULL,
-    empleado_responsable_id BIGINT,
-    tienda_id BIGINT,
-    FOREIGN KEY (envio_id) REFERENCES ENVIO(id),
-    FOREIGN KEY (empleado_responsable_id) REFERENCES EMPLEADO(id),
-    FOREIGN KEY (tienda_id) REFERENCES TIENDA(id)
+CREATE TABLE REPARTIDOR_INFO (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    empleado_id BIGINT UNIQUE NOT NULL,
+    licencia_conducir VARCHAR(20) UNIQUE NOT NULL,
+    disponible BOOLEAN DEFAULT TRUE,
+    calificacion_promedio DECIMAL(3,2) DEFAULT 0,
+    latitud_actual DECIMAL(10,8),
+    longitud_actual DECIMAL(11,8),
+    fecha_actualizacion_ubicacion DATETIME,
+    FOREIGN KEY (empleado_id) REFERENCES EMPLEADO(id)
 );
 
-CREATE TABLE RUTA (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    codigo_ruta VARCHAR(20) UNIQUE NOT NULL,
-    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    repartidor_id BIGINT NOT NULL,
-    origen VARCHAR(255) NOT NULL,
-    destino VARCHAR(255) NOT NULL,
-    distancia_total DECIMAL(8,2),
-    tiempo_estimado_total INT,
-    estado VARCHAR(20) DEFAULT 'PLANIFICADA',
-    fecha_inicio DATETIME,
-    fecha_finalizacion DATETIME,
-    observaciones TEXT,
-    FOREIGN KEY (repartidor_id) REFERENCES REPARTIDOR_INFO(id)
-);
 
-CREATE TABLE DIRECCION_CLIENTE (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    cliente_id BIGINT NOT NULL,
-    calle VARCHAR(255) NOT NULL,
-    numero VARCHAR(20),
-    colonia VARCHAR(100),
-    ciudad VARCHAR(100) NOT NULL,
-    estado VARCHAR(100) NOT NULL,
-    codigo_postal VARCHAR(10) NOT NULL,
-    pais VARCHAR(50) DEFAULT 'México',
-    referencias TEXT,
-    latitud DECIMAL(10,8),
-    longitud DECIMAL(11,8),
-    tipo_direccion VARCHAR(20) DEFAULT 'RESIDENCIAL',
-    principal BOOLEAN DEFAULT FALSE,
-    activa BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (cliente_id) REFERENCES CLIENTE(id)
-);
